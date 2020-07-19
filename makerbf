@@ -1,0 +1,2 @@
+#!/bin/bash
+quartus_cpf -c -o bitstream_compression=on output_files/DE10_NANO_SOC_GHRD.sof output_files/DE10_NANO_SOC_GHRD.rbf

@@ -80,12 +80,10 @@ wire     [2: 0]     hps_reset_req;
 wire                hps_cold_reset;
 wire                hps_warm_reset;
 wire                hps_debug_reset;
-wire     [27: 0]    stm_hw_events;
 wire                fpga_clk_50;
 // connection of internal logics
 assign LED[7: 1] = fpga_led_internal;
 assign fpga_clk_50 = FPGA_CLK1_50;
-assign stm_hw_events = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_buttons};
 
 
 
@@ -177,7 +175,6 @@ soc_system u0(
                .hps_0_h2f_reset_reset_n(hps_fpga_reset_n),                  //                hps_0_h2f_reset.reset_n
                .hps_0_f2h_cold_reset_req_reset_n(~hps_cold_reset),          //       hps_0_f2h_cold_reset_req.reset_n
                .hps_0_f2h_debug_reset_req_reset_n(~hps_debug_reset),        //      hps_0_f2h_debug_reset_req.reset_n
-               .hps_0_f2h_stm_hw_events_stm_hwevents(stm_hw_events),        //        hps_0_f2h_stm_hw_events.stm_hwevents
                .hps_0_f2h_warm_reset_req_reset_n(~hps_warm_reset),          //       hps_0_f2h_warm_reset_req.reset_n
 
            );
@@ -193,12 +190,6 @@ defparam debounce_inst.WIDTH = 2;
 defparam debounce_inst.POLARITY = "LOW";
 defparam debounce_inst.TIMEOUT = 50000;               // at 50Mhz this is a debounce time of 1ms
 defparam debounce_inst.TIMEOUT_WIDTH = 16;            // ceil(log2(TIMEOUT))
-
-// Source/Probe megawizard instance
-hps_reset hps_reset_inst(
-              .source_clk(fpga_clk_50),
-              .source(hps_reset_req)
-          );
 
 altera_edge_detector pulse_cold_reset(
                          .clk(fpga_clk_50),

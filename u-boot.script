@@ -1,0 +1,6 @@
+fatload mmc 0:1 $fpgadata DE10_NANO_SOC_GHRD.rbf;
+fpga load 0 $fpgadata $filesize;
+setenv fdtimage soc_system.dtb;
+run bridge_enable_handoff;
+run mmcload;
+run mmcboot;

@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "2";
          type = "int";
       }
       datum sopceditor_expanded
@@ -39,7 +39,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "5";
          type = "int";
       }
       datum sopceditor_expanded
@@ -52,7 +52,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "3";
          type = "int";
       }
       datum sopceditor_expanded
@@ -82,14 +82,6 @@
          type = "String";
       }
    }
-   element f2sdram_only_master
-   {
-      datum _sortIndex
-      {
-         value = "1";
-         type = "int";
-      }
-   }
    element hps_0
    {
       datum _sortIndex
@@ -115,7 +107,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "4";
          type = "int";
       }
       datum sopceditor_expanded
@@ -137,11 +129,19 @@
          type = "String";
       }
    }
+   element miner_0
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
    element mm_bridge_0
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "1";
          type = "int";
       }
    }
@@ -195,11 +195,7 @@
    internal="hps_0.f2h_debug_reset_req"
    type="reset"
    dir="end" />
- <interface
-   name="hps_0_f2h_stm_hw_events"
-   internal="hps_0.f2h_stm_hw_events"
-   type="conduit"
-   dir="end" />
+ <interface name="hps_0_f2h_stm_hw_events" internal="hps_0.f2h_stm_hw_events" />
  <interface
    name="hps_0_f2h_warm_reset_req"
    internal="hps_0.f2h_warm_reset_req"
@@ -219,7 +215,7 @@
    dir="end" />
  <interface name="memory" internal="hps_0.memory" type="conduit" dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
- <module name="button_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
+ <module name="button_pio" kind="altera_avalon_pio" version="20.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="true" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="true" />
@@ -233,13 +229,13 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="2" />
  </module>
- <module name="clk_0" kind="clock_source" version="18.1" enabled="1">
+ <module name="clk_0" kind="clock_source" version="20.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
- <module name="dipsw_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
+ <module name="dipsw_pio" kind="altera_avalon_pio" version="20.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="true" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="true" />
@@ -253,21 +249,7 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="4" />
  </module>
- <module
-   name="f2sdram_only_master"
-   kind="altera_jtag_avalon_master"
-   version="18.1"
-   enabled="1">
-  <parameter name="AUTO_DEVICE" value="5CSEBA6U23I7" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
-  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
-  <parameter name="COMPONENT_CLOCK" value="0" />
-  <parameter name="FAST_VER" value="0" />
-  <parameter name="FIFO_DEPTHS" value="2" />
-  <parameter name="PLI_PORT" value="50000" />
-  <parameter name="USE_PLI" value="0" />
- </module>
- <module name="hps_0" kind="altera_hps" version="18.1" enabled="1">
+ <module name="hps_0" kind="altera_hps" version="20.1" enabled="1">
   <parameter name="ABSTRACT_REAL_COMPARE_TEST" value="false" />
   <parameter name="ABS_RAM_MEM_INIT_FILENAME" value="meminit" />
   <parameter name="ACV_PHY_CLK_ADD_FR_PHASE" value="0.0" />
@@ -364,7 +346,7 @@
   <parameter name="EXPORT_AFI_HALF_CLK" value="false" />
   <parameter name="EXTRA_SETTINGS" value="" />
   <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
-  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="50000000" />
+  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM2_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM3_CLOCK_FREQ" value="100" />
@@ -377,10 +359,10 @@
   <parameter name="F2SCLK_SDRAMCLK_Enable" value="false" />
   <parameter name="F2SCLK_SDRAMCLK_FREQ" value="0" />
   <parameter name="F2SCLK_WARMRST_Enable" value="true" />
-  <parameter name="F2SDRAM_Type">Avalon-MM Bidirectional</parameter>
-  <parameter name="F2SDRAM_Width" value="256" />
+  <parameter name="F2SDRAM_Type" value="" />
+  <parameter name="F2SDRAM_Width" value="" />
   <parameter name="F2SINTERRUPT_Enable" value="true" />
-  <parameter name="F2S_Width" value="2" />
+  <parameter name="F2S_Width" value="1" />
   <parameter name="FIX_READ_LATENCY" value="8" />
   <parameter name="FORCED_NON_LDC_ADDR_CMD_MEM_CK_INVERT" value="false" />
   <parameter name="FORCED_NUM_WRITE_FR_CYCLE_SHIFTS" value="0" />
@@ -639,7 +621,7 @@
   <parameter name="S2FINTERRUPT_UART_Enable" value="false" />
   <parameter name="S2FINTERRUPT_USB_Enable" value="false" />
   <parameter name="S2FINTERRUPT_WATCHDOG_Enable" value="false" />
-  <parameter name="S2F_Width" value="2" />
+  <parameter name="S2F_Width" value="1" />
   <parameter name="SDIO_Mode" value="4-bit Data" />
   <parameter name="SDIO_PinMuxing" value="HPS I/O Set 0" />
   <parameter name="SEQUENCER_TYPE" value="NIOS" />
@@ -656,7 +638,7 @@
   <parameter name="SPIS1_Mode" value="N/A" />
   <parameter name="SPIS1_PinMuxing" value="Unused" />
   <parameter name="STARVE_LIMIT" value="10" />
-  <parameter name="STM_Enable" value="true" />
+  <parameter name="STM_Enable" value="false" />
   <parameter name="SYS_INFO_DEVICE_FAMILY" value="Cyclone V" />
   <parameter name="TEST_Enable" value="false" />
   <parameter name="TIMING_BOARD_AC_EYE_REDUCTION_H" value="0.0" />
@@ -797,7 +779,7 @@
   <parameter name="usb_mp_clk_div" value="0" />
   <parameter name="use_default_mpu_clk" value="true" />
  </module>
- <module name="led_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
+ <module name="led_pio" kind="altera_avalon_pio" version="20.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
@@ -811,10 +793,15 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="7" />
  </module>
+ <module name="miner_0" kind="miner" version="1.1" enabled="1">
+  <parameter name="MINER_CLK_MHZ" value="75 MHz" />
+  <parameter name="MINER_MAJ_VER" value="1" />
+  <parameter name="MINER_MIN_VER" value="1" />
+ </module>
  <module
    name="mm_bridge_0"
    kind="altera_avalon_mm_bridge"
-   version="18.1"
+   version="20.1"
    enabled="1">
   <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
   <parameter name="ADDRESS_WIDTH" value="10" />
@@ -831,21 +818,30 @@
  </module>
  <connection
    kind="avalon"
-   version="18.1"
+   version="20.1"
    start="hps_0.h2f_lw_axi_master"
    end="mm_bridge_0.s0">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="avalon" version="18.1" start="mm_bridge_0.m0" end="led_pio.s1">
+ <connection
+   kind="avalon"
+   version="20.1"
+   start="mm_bridge_0.m0"
+   end="miner_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x6000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="20.1" start="mm_bridge_0.m0" end="led_pio.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x3000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
-   version="18.1"
+   version="20.1"
    start="mm_bridge_0.m0"
    end="dipsw_pio.s1">
   <parameter name="arbitrationPriority" value="1" />
@@ -854,90 +850,83 @@
  </connection>
  <connection
    kind="avalon"
-   version="18.1"
+   version="20.1"
    start="mm_bridge_0.m0"
    end="button_pio.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x5000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="avalon"
-   version="18.1"
-   start="f2sdram_only_master.master"
-   end="hps_0.f2h_sdram0_data">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection kind="clock" version="18.1" start="clk_0.clk" end="led_pio.clk" />
- <connection kind="clock" version="18.1" start="clk_0.clk" end="dipsw_pio.clk" />
- <connection kind="clock" version="18.1" start="clk_0.clk" end="button_pio.clk" />
+ <connection kind="clock" version="20.1" start="clk_0.clk" end="led_pio.clk" />
+ <connection kind="clock" version="20.1" start="clk_0.clk" end="dipsw_pio.clk" />
+ <connection kind="clock" version="20.1" start="clk_0.clk" end="button_pio.clk" />
+ <connection kind="clock" version="20.1" start="clk_0.clk" end="mm_bridge_0.clk" />
  <connection
    kind="clock"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk"
-   end="f2sdram_only_master.clk" />
- <connection kind="clock" version="18.1" start="clk_0.clk" end="mm_bridge_0.clk" />
+   end="miner_0.clock_sink" />
  <connection
    kind="clock"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk"
    end="hps_0.f2h_axi_clock" />
  <connection
    kind="clock"
-   version="18.1"
-   start="clk_0.clk"
-   end="hps_0.f2h_sdram0_clock" />
- <connection
-   kind="clock"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk"
    end="hps_0.h2f_axi_clock" />
  <connection
    kind="clock"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk"
    end="hps_0.h2f_lw_axi_clock" />
  <connection
    kind="interrupt"
-   version="18.1"
+   version="20.1"
+   start="hps_0.f2h_irq0"
+   end="miner_0.interrupt_sender">
+  <parameter name="irqNumber" value="2" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="20.1"
    start="hps_0.f2h_irq0"
    end="button_pio.irq">
   <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="interrupt"
-   version="18.1"
+   version="20.1"
    start="hps_0.f2h_irq0"
    end="dipsw_pio.irq">
   <parameter name="irqNumber" value="0" />
  </connection>
  <connection
    kind="reset"
-   version="18.1"
-   start="clk_0.clk_reset"
-   end="f2sdram_only_master.clk_reset" />
- <connection
-   kind="reset"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk_reset"
    end="led_pio.reset" />
  <connection
    kind="reset"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk_reset"
    end="dipsw_pio.reset" />
  <connection
    kind="reset"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk_reset"
    end="button_pio.reset" />
  <connection
    kind="reset"
-   version="18.1"
+   version="20.1"
    start="clk_0.clk_reset"
    end="mm_bridge_0.reset" />
+ <connection
+   kind="reset"
+   version="20.1"
+   start="clk_0.clk_reset"
+   end="miner_0.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>

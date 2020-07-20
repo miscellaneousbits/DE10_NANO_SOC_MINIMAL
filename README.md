@@ -1,6 +1,6 @@
 # DE10 NANO SHA3 Miner Core
 
-![FPGA mining](quartus_18.1/doc/miner.png)
+![FPGA mining](doc/miner.png)
 
 Want to support this open source project? Please star it.
 

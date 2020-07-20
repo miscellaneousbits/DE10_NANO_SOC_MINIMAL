@@ -129,6 +129,14 @@
          type = "String";
       }
    }
+   element miner_0
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
    element mm_bridge_0
    {
       datum _sortIndex
@@ -785,6 +793,11 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="7" />
  </module>
+ <module name="miner_0" kind="miner" version="1.1" enabled="1">
+  <parameter name="MINER_CLK_MHZ" value="84 MHz" />
+  <parameter name="MINER_MAJ_VER" value="1" />
+  <parameter name="MINER_MIN_VER" value="1" />
+ </module>
  <module
    name="mm_bridge_0"
    kind="altera_avalon_mm_bridge"
@@ -810,6 +823,15 @@
    end="mm_bridge_0.s0">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="mm_bridge_0.m0"
+   end="miner_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x6000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="mm_bridge_0.m0" end="led_pio.s1">
@@ -843,6 +865,11 @@
    kind="clock"
    version="18.1"
    start="clk_0.clk"
+   end="miner_0.clock_sink" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clk_0.clk"
    end="hps_0.f2h_axi_clock" />
  <connection
    kind="clock"
@@ -854,6 +881,13 @@
    version="18.1"
    start="clk_0.clk"
    end="hps_0.h2f_lw_axi_clock" />
+ <connection
+   kind="interrupt"
+   version="18.1"
+   start="hps_0.f2h_irq0"
+   end="miner_0.interrupt_sender">
+  <parameter name="irqNumber" value="2" />
+ </connection>
  <connection
    kind="interrupt"
    version="18.1"
@@ -888,6 +922,11 @@
    version="18.1"
    start="clk_0.clk_reset"
    end="mm_bridge_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clk_0.clk_reset"
+   end="miner_0.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>

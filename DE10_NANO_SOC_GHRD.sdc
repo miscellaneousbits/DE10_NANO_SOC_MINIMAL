@@ -49,7 +49,9 @@ derive_clock_uncertainty
 #**************************************************************
 # Set Clock Groups
 #**************************************************************
-
+set_clock_groups -asynchronous \
+   -group [get_clocks {FPGA_CLK1_50}] \
+	-group [get_clocks {u0|miner_0|altera_pll_0|general[0].gpll~PLL_OUTPUT_COUNTER|divclk}]
 
 
 #**************************************************************

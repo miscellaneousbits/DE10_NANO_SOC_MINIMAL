@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="system" version="18.1" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2020.07.20.08:21:42 -->
+ <!-- 2020.07.20.11:09:13 -->
  <!-- A collection of modules and connections -->
  <parameter name="clockCrossingAdapter">
   <type>com.altera.sopcmodel.ensemble.EClockAdapter</type>
@@ -53,7 +53,7 @@
  </parameter>
  <parameter name="generationId">
   <type>int</type>
-  <value>1595247643</value>
+  <value>1595257697</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>true</visible>
@@ -45014,7 +45014,7 @@ the requested settings for a module instance. -->
   </assignment>
   <parameter name="MINER_CLK_MHZ">
    <type>java.lang.String</type>
-   <value>84 MHz</value>
+   <value>86 MHz</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -52038,5 +52038,5 @@ parameters are a RESULT of the module parameters. -->
   <version>18.1</version>
  </plugin>
  <reportVersion>18.1 625</reportVersion>
- <uniqueIdentifier>FCF8AEF7DEE2000001736C2BCC3A</uniqueIdentifier>
+ <uniqueIdentifier>FCF8AEF7DEE2000001736CC531DF</uniqueIdentifier>
 </EnsembleReport>

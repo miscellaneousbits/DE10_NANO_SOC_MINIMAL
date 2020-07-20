@@ -14,11 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with SHA3-256 Miner.  If not, see <https://www.gnu.org/licenses/>.
 
+// Single pipeline stage (or round) simple permutes the input according to
+// the SHA3 algorithm and stores the output once per clock.
 
-// Control bits
-// 31:24 - padding first byte
-// 23:16 - padding last byte
-// 0:0   _ run
+module round (
+   input               clk,
+   input      [1599:0] in,
+   input         [6:0] rc,
+   output reg [1599:0] out);
+
+   wire [1599:0] round_out;
+   
+   permutation p (in, rc, round_out);
+
+   always @ (posedge clk)
+      out <= round_out;
+        
+endmodule
 
 // The mining engine.
 // Due to FPGA size constraints, a full 24 stage pipeline is not possible.

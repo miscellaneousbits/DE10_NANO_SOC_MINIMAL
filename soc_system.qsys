@@ -794,7 +794,7 @@
   <parameter name="width" value="7" />
  </module>
  <module name="miner_0" kind="miner" version="1.1" enabled="1">
-  <parameter name="MINER_CLK_MHZ" value="84 MHz" />
+  <parameter name="MINER_CLK_MHZ" value="86 MHz" />
   <parameter name="MINER_MAJ_VER" value="1" />
   <parameter name="MINER_MIN_VER" value="1" />
  </module>

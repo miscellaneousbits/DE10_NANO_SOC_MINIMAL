@@ -191,12 +191,6 @@ defparam debounce_inst.POLARITY = "LOW";
 defparam debounce_inst.TIMEOUT = 50000;               // at 50Mhz this is a debounce time of 1ms
 defparam debounce_inst.TIMEOUT_WIDTH = 16;            // ceil(log2(TIMEOUT))
 
-// Source/Probe megawizard instance
-hps_reset hps_reset_inst(
-              .source_clk(fpga_clk_50),
-              .source(hps_reset_req)
-          );
-
 altera_edge_detector pulse_cold_reset(
                          .clk(fpga_clk_50),
                          .rst_n(hps_fpga_reset_n),

@@ -388,7 +388,7 @@ module soc_system (
 	);
 
 	miner #(
-		.MINER_CLK_MHZ ("84 MHz"),
+		.MINER_CLK_MHZ ("86 MHz"),
 		.MINER_MAJ_VER (1),
 		.MINER_MIN_VER (1)
 	) miner_0 (

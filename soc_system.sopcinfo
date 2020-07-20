@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2020.07.20.08:20:57 -->
+ <!-- 2020.07.20.11:08:31 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1595247643</value>
+  <value>1595257697</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -76411,7 +76411,7 @@ the requested settings for a module instance. -->
   </assignment>
   <parameter name="MINER_CLK_MHZ">
    <type>java.lang.String</type>
-   <value>84 MHz</value>
+   <value>86 MHz</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>

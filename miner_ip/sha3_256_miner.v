@@ -29,7 +29,6 @@ module round (
 
    always @ (posedge clk)
       out <= round_out;
-        
 endmodule
 
 // The mining engine.
@@ -102,17 +101,6 @@ generate
    end
 endgenerate
 
-// Convert the difficulty
-wire [255:0] diff_w;
-
-generate
-   for(w = 0; w < 4; w = w + 1) begin : L2
-      for(b = 0; b < 8; b = b + 1) begin : L3
-         assign diff_w[`high_pos(w,b):`low_pos(w,b)] = difficulty[`high_pos2(w,b):`low_pos2(w,b)];
-      end
-   end
-endgenerate
- 
 // Round constantts, bits 63, 31, 15, 7, 3, 1 and 0
 wire [6:0] rc_w [0:23];
 assign rc_w[0]  = 'h01; assign rc_w[1]  = 'h1a; assign rc_w[2]  = 'h5e; assign rc_w[3]  = 'h70;
@@ -156,19 +144,20 @@ generate
 endgenerate
 
 // Final hash is the little endian upper 256 bits of sponge.
-wire [255:0] out_hash_le_w = state_w[7][1599:1600-256];
-wire [255:0] out_hash_w;
+wire [255:0] out_hash_be_w = state_w[7][1599:1600-256];
+wire [255:0] out_hash_le_w;
 
 generate
    for(w = 0; w < 4; w = w + 1) begin : L4
       for(b = 0; b < 8; b = b + 1) begin : L5
-         assign out_hash_w[`high_pos(w,b):`low_pos(w,b)] = out_hash_le_w[`high_pos2(w,b):`low_pos2(w,b)];
+         assign out_hash_le_w[`high_pos(w,b):`low_pos(w,b)] = out_hash_be_w[`high_pos2(w,b):`low_pos2(w,b)];
       end
    end
 endgenerate
 
+
 // Hash is less than or equal to difficulty
-wire match_w = (test_w ? (out_hash_le_w == diff_w) : (out_hash_w <= diff_w))
+wire match_w = (test_w ? (out_hash_le_w == difficulty) : (out_hash_le_w <= difficulty))
    && valid_w && (pass == 0);
 
 always @(posedge clk)

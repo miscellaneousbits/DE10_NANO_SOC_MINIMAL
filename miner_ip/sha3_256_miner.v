@@ -156,10 +156,19 @@ generate
 endgenerate
 
 // Final hash is the little endian upper 256 bits of sponge.
-wire [255:0] out_hash_w = state_w[7][1599:1600-256];
+wire [255:0] out_hash_le_w = state_w[7][1599:1600-256];
+wire [255:0] out_hash_w;
+
+generate
+   for(w = 0; w < 4; w = w + 1) begin : L4
+      for(b = 0; b < 8; b = b + 1) begin : L5
+         assign out_hash_w[`high_pos(w,b):`low_pos(w,b)] = out_hash_le_w[`high_pos2(w,b):`low_pos2(w,b)];
+      end
+   end
+endgenerate
 
 // Hash is less than or equal to difficulty
-wire match_w = (test_w ? (out_hash_w == diff_w) : (out_hash_w <= diff_w))
+wire match_w = (test_w ? (out_hash_le_w == diff_w) : (out_hash_w <= diff_w))
    && valid_w && (pass == 0);
 
 always @(posedge clk)

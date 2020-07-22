@@ -103,7 +103,7 @@ begin
       if (irq_r == 2'b01)
          irq <= 1;
       else    // Clear outgoing IRQ on any read operation
-         irq <= (read & irq) ? 1'b0 : irq;
+         irq <= (read && irq && (address == CTL_REG)) ? 1'b0 : irq;
    end
 end
 

@@ -55,11 +55,12 @@ wire [7:0] miner_mhz_w = (10 * tens) + ones;
 // Control bits
 // 0     - run
 // 1     - enable test mode
+// 2     - halt
 // 23:16 - padding last byte
 // 31:24 - padding first byte
 //
 // STAT_REGus bits
-// 0     - found (irq)
+// 0     - found
 // 1     - running
 // 2     - testing
 // 15:8  - miner freq.
@@ -102,7 +103,7 @@ begin
       irq_r <= {irq_r[0], irq_w};
       if (irq_r == 2'b01)
          irq <= 1;
-      else    // Clear outgoing IRQ on any read operation
+      else    // Clear outgoing IRQ on any ctl reg read operation
          irq <= (read && irq && (address == CTL_REG)) ? 1'b0 : irq;
    end
 end
@@ -151,7 +152,7 @@ wire [255:0] difficulty_w =
 wire [63:0] start_nonce_w = {data_r[START_REG + 0], data_r[START_REG + 1]};
 
 // Pack the control data for the miner core
-wire [17:0] control_w = {data_r[CTL_REG][31:24], data_r[CTL_REG][23:16], data_r[CTL_REG][1:0]};
+wire [18:0] control_w = {data_r[CTL_REG][31:24], data_r[CTL_REG][23:16], data_r[CTL_REG][2:0]};
 
 wire miner_clk_w;
 

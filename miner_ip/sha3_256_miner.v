@@ -46,7 +46,7 @@ module sha3_256_miner (
    input       [255:0]  header,
    input       [255:0]  difficulty,
    input       [63:0]   start_nonce,
-   input       [17:0]   control,
+   input       [18:0]   control,
    output reg  [63:0]   solution,
    output      [2:0]    status,
    output reg           irq
@@ -62,20 +62,31 @@ reg [4:0] cycles_r;
 
 // Filter async signal
 reg [1:0] run_r;
+reg [1:0] halt_r;
+
 always @(posedge clk)
+begin
    if (rst)
+	begin
 	   run_r <= 0;
+		halt_r <= 0;
+	end
    else
+	begin
       run_r <= {run_r[0], control[0]};
+      halt_r <= {halt_r[0], control[2]};
+	end
+end
 
 // Front and back padding values and control signals
-wire [7:0] padf_w = control[17:10];
-wire [7:0] padl_w = control[9:2];
+wire [7:0] padf_w = control[18:11];
+wire [7:0] padl_w = control[10:3];
+wire       halt_w = halt_r[1];
 wire        run_w = run_r[1];
 wire       test_w = control[1];
 
 // Current status
-assign status = {test_w, run_w, irq};
+assign status = {test_w, run_w, irq & ~halt_w};
 
 // Constant 768 bit pad
 wire [767:0] pad_w = {56'b0, padf_w, 640'b0, padl_w, 56'b0};
@@ -175,7 +186,7 @@ begin
          // Modulo 64 cycle count
          cycles_r <= cycles_r == 5'd23 ? 5'b0 : cycles_r + 1'b1;
                            
-         if (match_w & valid_w) begin
+         if ((match_w | halt_w) & valid_w) begin
             solution <= solution - 8; // control[0]Solution is 8 cycles old.
             irq <= 1; // report match with IRQ and halt
          end

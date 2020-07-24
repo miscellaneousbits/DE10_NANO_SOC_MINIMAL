@@ -137,7 +137,7 @@
          type = "int";
       }
    }
-   element miner_0.avalon_slave
+   element miner_0.sl
    {
       datum _lockedAddress
       {
@@ -159,6 +159,14 @@
       {
          value = "1";
          type = "boolean";
+      }
+   }
+   element soc_system
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
       }
    }
 }
@@ -833,15 +841,6 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="avalon"
-   version="20.1"
-   start="mm_bridge_0.m0"
-   end="miner_0.avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x6000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection kind="avalon" version="20.1" start="mm_bridge_0.m0" end="led_pio.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x3000" />
@@ -865,15 +864,16 @@
   <parameter name="baseAddress" value="0x5000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection kind="avalon" version="20.1" start="mm_bridge_0.m0" end="miner_0.sl">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x6000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection kind="clock" version="20.1" start="clk_0.clk" end="led_pio.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="dipsw_pio.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="button_pio.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="mm_bridge_0.clk" />
- <connection
-   kind="clock"
-   version="20.1"
-   start="clk_0.clk"
-   end="miner_0.clock_sink" />
+ <connection kind="clock" version="20.1" start="clk_0.clk" end="miner_0.clk" />
  <connection
    kind="clock"
    version="20.1"
@@ -893,13 +893,6 @@
    kind="interrupt"
    version="20.1"
    start="hps_0.f2h_irq0"
-   end="miner_0.interrupt_sender">
-  <parameter name="irqNumber" value="2" />
- </connection>
- <connection
-   kind="interrupt"
-   version="20.1"
-   start="hps_0.f2h_irq0"
    end="button_pio.irq">
   <parameter name="irqNumber" value="1" />
  </connection>
@@ -909,6 +902,13 @@
    start="hps_0.f2h_irq0"
    end="dipsw_pio.irq">
   <parameter name="irqNumber" value="0" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="20.1"
+   start="hps_0.f2h_irq0"
+   end="miner_0.irq">
+  <parameter name="irqNumber" value="2" />
  </connection>
  <connection
    kind="reset"
@@ -934,7 +934,7 @@
    kind="reset"
    version="20.1"
    start="clk_0.clk_reset"
-   end="miner_0.reset_sink" />
+   end="miner_0.reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>

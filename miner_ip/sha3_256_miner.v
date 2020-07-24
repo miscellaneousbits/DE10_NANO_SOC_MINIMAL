@@ -29,6 +29,7 @@ module round (
 
    always @ (posedge clk)
       out <= round_out;
+		
 endmodule
 
 // The mining engine.
@@ -51,6 +52,15 @@ module sha3_256_miner (
    output      [2:0]    status,
    output reg           irq
 );
+
+// Synchronize control signals
+reg [18:0] ctl_r [1:0];
+
+always @(posedge clk)
+begin
+	ctl_r[0] = rst ? 0 : control;
+	ctl_r[1] = rst ? 0 : ctl_r[0];
+end
 
 // Only hashes out of phase 0 are valid except for the
 // 1st phase after run is enabled. Skip the 1st 8 cycles
@@ -79,11 +89,11 @@ begin
 end
 
 // Front and back padding values and control signals
-wire [7:0] padf_w = control[18:11];
-wire [7:0] padl_w = control[10:3];
-wire       halt_w = halt_r[1];
-wire        run_w = run_r[1];
-wire       test_w = control[1];
+wire [7:0] padf_w = ctl_r[1][18:11];
+wire [7:0] padl_w = ctl_r[1][10:3];
+wire       halt_w = ctl_r[1][2];
+wire       test_w = ctl_r[1][1];
+wire        run_w = ctl_r[1][0];
 
 // Current status
 assign status = {test_w, run_w, irq & ~halt_w};

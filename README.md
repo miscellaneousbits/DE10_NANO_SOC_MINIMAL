@@ -31,8 +31,8 @@ to the header, is less than or equal to the difficulty:
 
 D >= SHA3({H, N})
 
-NOTE: This will not mine any real blockchain. It is only meant as an illustration
-of how an FPGA miner core might work.
+NOTE: This will not mine a real blockchain. It would be well suited to mine the ETC chain as proposed
+in [ECIP-1049](https://github.com/ethereumclassic/ECIPs/issues/13)
 
 ## Implementation
 
@@ -94,8 +94,27 @@ The Avalon bus is the bus used by the ARM cores in the SOCFPGA system.
 | --- | --- | --- |
 | 0 | RUN | 0 - clear, 1 - auto increment the nonce and check hashes |
 | 1 | TEST | 0 - normal mode, 1 - test mode, look for exact match with diff |
+| 2 | HALT | 0 - normal mode, 1 - halt mining and raise interrupt |
 | 23-16 | PAD_LAST | last pad byte, 0x80 for KECCACK-256 and SHA3-256 |
 | 31-24 | PAD_FIRST | first pad byte, 0x01 for KECCACK-256, and 0x06 for SHA3-256 |
+
+## Building the FPGA bitsream
+
+### Prerequisites
+
+- Quartus 20.1 Free Edition, available [here](https://fpgasoftware.intel.com/?edition=lite)
+- Intel SoC FPGA Embedded Development Suite Standard Edition, available [here](https://fpgasoftware.intel.com/soceds/20.1/?edition=standard)
+
+### Building
+
+From the command line:
+```
+git clone https://github.com/miscellaneousbits/DE10_NANO_SOC_MINIMAL.git
+cd DE10_NANO_SOC_MINIMAL
+make sof
+./makerbf
+```
+This will create the .rbf (bitstream) to configure the FPGA.
 
 ## Disclaimer
 

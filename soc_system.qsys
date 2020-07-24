@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "3";
          type = "int";
       }
       datum sopceditor_expanded
@@ -39,7 +39,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "0";
          type = "int";
       }
       datum sopceditor_expanded
@@ -52,7 +52,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "4";
          type = "int";
       }
       datum sopceditor_expanded
@@ -86,7 +86,7 @@
    {
       datum _sortIndex
       {
-         value = "0";
+         value = "1";
          type = "int";
       }
       datum sopceditor_expanded
@@ -107,7 +107,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "5";
          type = "int";
       }
       datum sopceditor_expanded
@@ -137,11 +137,19 @@
          type = "int";
       }
    }
+   element miner_0.avalon_slave
+   {
+      datum _lockedAddress
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
    element mm_bridge_0
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "2";
          type = "int";
       }
    }
@@ -788,10 +796,10 @@
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
   <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="127" />
+  <parameter name="resetValue" value="255" />
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="7" />
+  <parameter name="width" value="8" />
  </module>
  <module name="miner_0" kind="miner" version="1.1" enabled="1">
   <parameter name="MINER_CLK_MHZ" value="75 MHz" />

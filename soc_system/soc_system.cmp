@@ -55,7 +55,7 @@
 			hps_0_hps_io_hps_io_gpio_inst_GPIO53  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO53
 			hps_0_hps_io_hps_io_gpio_inst_GPIO54  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO54
 			hps_0_hps_io_hps_io_gpio_inst_GPIO61  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO61
-			led_pio_external_connection_export    : out   std_logic_vector(6 downto 0);                     -- export
+			led_pio_external_connection_export    : out   std_logic_vector(7 downto 0);                     -- export
 			memory_mem_a                          : out   std_logic_vector(14 downto 0);                    -- mem_a
 			memory_mem_ba                         : out   std_logic_vector(2 downto 0);                     -- mem_ba
 			memory_mem_ck                         : out   std_logic;                                        -- mem_ck

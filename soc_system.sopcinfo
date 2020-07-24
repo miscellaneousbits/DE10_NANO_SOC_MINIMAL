@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 20.1 711 (Future versions may contain additional information.) -->
- <!-- 2020.07.22.23:09:57 -->
+ <!-- 2020.07.23.23:45:34 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1595473785</value>
+  <value>1595562322</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -75637,7 +75637,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DATA_WIDTH</name>
-   <value>7</value>
+   <value>8</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DO_TEST_BENCH_WIRING</name>
@@ -75673,7 +75673,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.RESET_VALUE</name>
-   <value>127</value>
+   <value>255</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
@@ -75689,11 +75689,11 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.altr,gpio-bank-width</name>
-   <value>7</value>
+   <value>8</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.resetvalue</name>
-   <value>127</value>
+   <value>255</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.vendor</name>
@@ -75757,7 +75757,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="resetValue">
    <type>long</type>
-   <value>127</value>
+   <value>255</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -75781,7 +75781,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="width">
    <type>int</type>
-   <value>7</value>
+   <value>8</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -76389,7 +76389,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>out_port</name>
     <direction>Output</direction>
-    <width>7</width>
+    <width>8</width>
     <role>export</role>
    </port>
   </interface>

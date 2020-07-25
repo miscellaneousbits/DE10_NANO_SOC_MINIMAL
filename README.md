@@ -1,6 +1,6 @@
 # DE10 NANO SHA3 Miner Core
 
-![FPGA mining](doc/miner.png)
+![FPGA mining](quartus/doc/miner.png)
 
 Want to support this open source project? Please star it.
 
@@ -11,6 +11,9 @@ Want to support this open source project? Please star it.
 * [Miner Component](#miner_component)
 	* [Block diagram](#block_diagram)
 	* [API](#api)
+* [Building](#building)
+   * [Prerequisites](#prerequisites)
+   * [Synthesizing](#synthesizing)
 * [Disclaimer](#disclaimer)
 
 ## Introduction
@@ -36,17 +39,20 @@ in [ECIP-1049](https://github.com/ethereumclassic/ECIPs/issues/13)
 
 ## Implementation
 
-A Quartus 18.1 project is presented for the DE10 NANO, a low cost FPGA development board equipped with
+A Quartus project is presented for the DE10 NANO, a low cost FPGA development board equipped with
 an Intel 5CSEBA6U23I7NDK FPGA. The FPGA includes a dual core ARM hard processor able to run Linux,
 used in [this](https://github.com/miscellaneousbits/linux-socfpga-sha3-miner.git) project to test the core.
 The low cost Cyclone V FPGA can produce and verify over 25 million hashes
-per second using under 5 watts of power. An 8 stage pipeline is used in three phases since a fully unrolled
+per second using under 5 watts of power.
+
+An 8 stage pipeline is used in three phases since a fully unrolled
 24 stage pipeline exceeds the capacity of this FPGA.
 
 ## Miner Component
 
 The component is an Avalon bus slave with a 23 word memory mapped register file for control and status.
-The Avalon bus is the bus used by the ARM cores in the SOCFPGA system.
+The Avalon bus is the bus used by the ARM cores in the SOCFPGA system. The mining core IP is located
+in directory quartus/miner_ip
 
 ### Block diagram
 
@@ -98,23 +104,24 @@ The Avalon bus is the bus used by the ARM cores in the SOCFPGA system.
 | 23-16 | PAD_LAST | last pad byte, 0x80 for KECCACK-256 and SHA3-256 |
 | 31-24 | PAD_FIRST | first pad byte, 0x01 for KECCACK-256, and 0x06 for SHA3-256 |
 
-## Building the FPGA bitsream
+## Building
 
 ### Prerequisites
 
 - Quartus 20.1 Free Edition, available [here](https://fpgasoftware.intel.com/?edition=lite)
 - Intel SoC FPGA Embedded Development Suite Standard Edition, available [here](https://fpgasoftware.intel.com/soceds/20.1/?edition=standard)
 
-### Building
+### Synthesizing
 
 From the command line:
 ```
 git clone https://github.com/miscellaneousbits/DE10_NANO_SOC_MINIMAL.git
-cd DE10_NANO_SOC_MINIMAL
+cd DE10_NANO_SOC_MINIMAL/quartus
 make sof
 ./makerbf
+ls output_files/DE10_NANO_SOC_GHRD.rbf
 ```
-This will create the .rbf (bitstream) to configure the FPGA.
+This will create the .rbf (bitstream) needed to configure the FPGA.
 
 ## Disclaimer
 

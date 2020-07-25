@@ -29,7 +29,7 @@ module round (
 
    always @ (posedge clk)
       out <= round_out;
-		
+      
 endmodule
 
 // The mining engine.
@@ -58,8 +58,8 @@ reg [18:0] ctl_r [1:0];
 
 always @(posedge clk)
 begin
-	ctl_r[0] = rst ? 0 : control;
-	ctl_r[1] = rst ? 0 : ctl_r[0];
+   ctl_r[0] = rst ? 0 : control;
+   ctl_r[1] = rst ? 0 : ctl_r[0];
 end
 
 // Only hashes out of phase 0 are valid except for the
@@ -77,15 +77,15 @@ reg [1:0] halt_r;
 always @(posedge clk)
 begin
    if (rst)
-	begin
-	   run_r <= 0;
-		halt_r <= 0;
-	end
+   begin
+      run_r <= 0;
+      halt_r <= 0;
+   end
    else
-	begin
+   begin
       run_r <= {run_r[0], control[0]};
       halt_r <= {halt_r[0], control[2]};
-	end
+   end
 end
 
 // Front and back padding values and control signals

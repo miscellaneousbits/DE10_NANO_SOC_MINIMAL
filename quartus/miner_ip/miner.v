@@ -119,11 +119,11 @@ begin
             SOLN_REG + 0: readdata <= solution_w[31:0];
             SOLN_REG + 1: readdata <= solution_w[63:32];
             STAT_REG:
-				   begin
+               begin
                   readdata[2:0] <= status_w;
                   readdata[15:8] <= miner_mhz_w;
-						readdata[19:16] <= MINER_MAJ_VER;
-						readdata[23:20] <= MINER_MIN_VER;
+                  readdata[19:16] <= MINER_MAJ_VER;
+                  readdata[23:20] <= MINER_MIN_VER;
                end
             SHA3_REG:     readdata <= "SHA3";
          endcase
@@ -157,22 +157,22 @@ wire [18:0] control_w = {data_r[CTL_REG][31:24], data_r[CTL_REG][23:16], data_r[
 wire miner_clk_w;
 
 altera_pll #(
-	.fractional_vco_multiplier("false"),
-	.reference_clock_frequency("50.0 MHz"),
-	.operation_mode("direct"),
-	.number_of_clocks(1),
-	.output_clock_frequency0(MINER_CLK_MHZ),
-	.phase_shift0("0 ps"),
-	.duty_cycle0(50),
-	.pll_type("General"),
-	.pll_subtype("General")
+   .fractional_vco_multiplier("false"),
+   .reference_clock_frequency("50.0 MHz"),
+   .operation_mode("direct"),
+   .number_of_clocks(1),
+   .output_clock_frequency0(MINER_CLK_MHZ),
+   .phase_shift0("0 ps"),
+   .duty_cycle0(50),
+   .pll_type("General"),
+   .pll_subtype("General")
 ) altera_pll_0 (
-	.rst(rst),
-	.outclk(miner_clk_w),
-	.locked(),
-	.fboutclk(),
-	.fbclk(1'b0),
-	.refclk(clk)
+   .rst(rst),
+   .outclk(miner_clk_w),
+   .locked(),
+   .fboutclk(),
+   .fbclk(1'b0),
+   .refclk(clk)
 );
 
 // SHA3_REG-256 mining core

@@ -62,54 +62,36 @@ begin
    ctl_r[1] = rst ? 0 : ctl_r[0];
 end
 
+// Front and back padding values and control signals
+wire [7:0] ctl_padf_w = ctl_r[1][18:11];
+wire [7:0] ctl_padl_w = ctl_r[1][10:3];
+wire       ctl_halt_w = ctl_r[1][2];
+wire       ctl_test_w = ctl_r[1][1];
+wire        ctl_run_w = ctl_r[1][0];
+
 // Only hashes out of phase 0 are valid except for the
 // 1st phase after run is enabled. Skip the 1st 8 cycles
-reg [3:0] valid_r;
-wire valid_w = valid_r == 8;
+reg [3:0] valid_hash_r;
+wire valid_hash_w = valid_hash_r == 8;
 
 // Modulo 24 cycle counter
 reg [4:0] cycles_r;
 
-// Filter async signal
-reg [1:0] run_r;
-reg [1:0] halt_r;
-
-always @(posedge clk)
-begin
-   if (rst)
-   begin
-      run_r <= 0;
-      halt_r <= 0;
-   end
-   else
-   begin
-      run_r <= {run_r[0], control[0]};
-      halt_r <= {halt_r[0], control[2]};
-   end
-end
-
-// Front and back padding values and control signals
-wire [7:0] padf_w = ctl_r[1][18:11];
-wire [7:0] padl_w = ctl_r[1][10:3];
-wire       halt_w = ctl_r[1][2];
-wire       test_w = ctl_r[1][1];
-wire        run_w = ctl_r[1][0];
-
 // Current status
-assign status = {test_w, run_w, irq & ~halt_w};
+assign status = {ctl_test_w, ctl_run_w, irq & ~ctl_halt_w};
 
 // Constant 768 bit pad
-wire [767:0] pad_w = {56'b0, padf_w, 640'b0, padl_w, 56'b0};
+wire [767:0] ctl_pad_w = {56'b0, ctl_padf_w, 640'b0, ctl_padl_w, 56'b0};
 
 // big and little endian input
 wire [319:0] in_le_w = {header, solution};
 wire [319:0] in_be_w;
 
 //assign in_be_w = in_le_w;
-`define low_pos(w,b)   ((w)*64 + (b)*8)
-`define low_pos2(w,b)  `low_pos(w,7-b)
-`define high_pos(w,b)  (`low_pos(w,b) + 7)
-`define high_pos2(w,b) (`low_pos2(w,b) + 7)
+`define low_bit(w,b)   ((w)*64 + (b)*8)
+`define low_bit2(w,b)  `low_bit(w,7-b)
+`define high_bit(w,b)  (`low_bit(w,b) + 7)
+`define high_bit2(w,b) (`low_bit2(w,b) + 7)
 
 genvar w, b;
 
@@ -117,7 +99,7 @@ genvar w, b;
 generate
    for(w = 0; w < 5; w = w + 1) begin : L0
       for(b = 0; b < 8; b = b + 1) begin : L1
-         assign in_be_w[`high_pos(w,b):`low_pos(w,b)] = in_le_w[`high_pos2(w,b):`low_pos2(w,b)];
+         assign in_be_w[`high_bit(w,b):`low_bit(w,b)] = in_le_w[`high_bit2(w,b):`low_bit2(w,b)];
       end
    end
 endgenerate
@@ -135,13 +117,13 @@ assign rc_w[20] = 'h79; assign rc_w[21] = 'h58; assign rc_w[22] = 'h21; assign r
 wire [1599:0] state_w [0:7];
 
 // Current phase of 8 rounds (0-2). Easy divide by 8.
-wire [1:0] pass = cycles_r[4:3];
+wire [1:0] pass_w = cycles_r[4:3];
 
 // Special case, round 0 which has per pass input and simple rc calculation
 round r_0(
    .clk(clk),
-   .rc(rc_w[{pass, 3'b0}]),
-   .in(pass ? state_w[7] : {in_be_w, pad_w, 512'b0}), 
+   .rc(rc_w[{pass_w, 3'b0}]),
+   .in(pass_w ? state_w[7] : {in_be_w, ctl_pad_w, 512'b0}), 
    .out(state_w[0])
 );
 
@@ -171,44 +153,44 @@ wire [255:0] out_hash_le_w;
 generate
    for(w = 0; w < 4; w = w + 1) begin : L4
       for(b = 0; b < 8; b = b + 1) begin : L5
-         assign out_hash_le_w[`high_pos(w,b):`low_pos(w,b)] = out_hash_be_w[`high_pos2(w,b):`low_pos2(w,b)];
+         assign out_hash_le_w[`high_bit(w,b):`low_bit(w,b)] = out_hash_be_w[`high_bit2(w,b):`low_bit2(w,b)];
       end
    end
 endgenerate
 
 
 // Hash is less than or equal to difficulty
-wire match_w = (test_w ? (out_hash_le_w == difficulty) : (out_hash_le_w <= difficulty))
-   && valid_w && (pass == 0);
+wire match_w = (ctl_test_w ? (out_hash_le_w == difficulty) : (out_hash_le_w <= difficulty))
+   && valid_hash_w && (pass_w == 0);
 
 always @(posedge clk)
 begin
-   if (rst | ~run_w) begin
+   if (rst | ~ctl_run_w) begin
       irq <= 0;
-      valid_r <= -1;
+      valid_hash_r <= -1;
       cycles_r <= -1;
       solution <= start_nonce;
    end
    else begin
       if (!irq) begin
          // Count up to 8 (end of 1st phase)
-         valid_r <= valid_w ? valid_r : valid_r + 1'b1;
-         // Modulo 64 cycle count
+         valid_hash_r <= valid_hash_w ? valid_hash_r : valid_hash_r + 1'b1;
+         // Modulo 24 cycle count
          cycles_r <= cycles_r == 5'd23 ? 5'b0 : cycles_r + 1'b1;
                            
-         if ((match_w | halt_w) & valid_w) begin
+         if ((match_w | ctl_halt_w) & valid_hash_w) begin
             solution <= solution - 8; // control[0]Solution is 8 cycles old.
             irq <= 1; // report match with IRQ and halt
          end
          else // Otherwise increment the nonce for the next cycle
-            solution <= pass == 0 ? solution + 1 : solution;
+            solution <= pass_w ? solution : solution + 1;
       end
    end
 end
 
-`undef low_pos
-`undef low_pos2
-`undef high_pos
-`undef high_pos2
+`undef low_bit
+`undef low_bit2
+`undef high_bit
+`undef high_bit2
         
 endmodule

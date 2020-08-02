@@ -95,16 +95,15 @@ reg [1:0] irq_r;
 // Interrupt sender (clear on read)
 always @(posedge clk)
 begin
+   irq_r <= rst ? 0 : {irq_r[0], irq_w};
    if (rst) begin // Clear outgoing IRQ on reset
       irq <= 0;
-      irq_r <= 0;
    end
    else begin // look for positive edge on incoming IRQ signal
-      irq_r <= {irq_r[0], irq_w};
       if (irq_r == 2'b01)
          irq <= 1;
       else    // Clear outgoing IRQ on any ctl reg read operation
-         irq <= (read && irq && (address == CTL_REG)) ? 1'b0 : irq;
+         irq <= (read && (address == CTL_REG)) ? 1'b0 : irq;
    end
 end
 
@@ -125,7 +124,7 @@ begin
                   readdata[19:16] <= MINER_MAJ_VER;
                   readdata[23:20] <= MINER_MIN_VER;
                end
-            SHA3_REG:     readdata <= "SHA3";
+            SHA3_REG: readdata <= "SHA3";
          endcase
    end
 end
@@ -155,6 +154,7 @@ wire [63:0] start_nonce_w = {data_r[START_REG + 0], data_r[START_REG + 1]};
 wire [18:0] control_w = {data_r[CTL_REG][31:24], data_r[CTL_REG][23:16], data_r[CTL_REG][2:0]};
 
 wire miner_clk_w;
+wire miner_clk_lock_w;
 
 altera_pll #(
    .fractional_vco_multiplier("false"),
@@ -169,7 +169,7 @@ altera_pll #(
 ) altera_pll_0 (
    .rst(rst),
    .outclk(miner_clk_w),
-   .locked(),
+   .locked(miner_clk_lock_w),
    .fboutclk(),
    .fbclk(1'b0),
    .refclk(clk)
@@ -177,7 +177,7 @@ altera_pll #(
 
 // SHA3_REG-256 mining core
 sha3_256_miner sha3_256_miner (
-   .clk(miner_clk_w),
+   .clk(miner_clk_w & miner_clk_lock_w),
    .rst(rst),
    .header(header_w),
    .difficulty(difficulty_w),

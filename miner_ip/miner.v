@@ -39,7 +39,7 @@ parameter MINER_MIN_VER = 0;
 wire [6 * 8 - 1:0] miner_clk_mhz_w = MINER_CLK_MHZ;
 wire [7:0] tens = miner_clk_mhz_w[43:40];
 wire [3:0] ones = miner_clk_mhz_w[35:32];
-wire [7:0] miner_mhz_w = (10 * tens) + ones;
+wire [7:0] miner_mhz_w = (4'd10 * tens) + ones;
 
 ///////////////////////////////////////////////////
 // Register map.
@@ -95,7 +95,7 @@ reg [1:0] irq_r;
 // Interrupt sender (clear on read)
 always @(posedge clk)
 begin
-   irq_r <= rst ? 0 : {irq_r[0], irq_w};
+   irq_r <= rst ? 1'b0 : {irq_r[0], irq_w};
    if (rst) begin // Clear outgoing IRQ on reset
       irq <= 0;
    end

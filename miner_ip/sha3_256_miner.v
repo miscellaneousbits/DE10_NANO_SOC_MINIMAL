@@ -40,7 +40,7 @@ endmodule
 // padded, and used as input to the 1st stage of the pipe. Output hashes
 // are checked against the difficulty value and a less than or equal match
 // triigers and IRQ and freezes the engine.
-   
+
 module sha3_256_miner (
    input                clk,
    input                rst,
@@ -53,13 +53,16 @@ module sha3_256_miner (
    output reg           irq
 );
 
+localparam S = 8; // Stages (2, 4, or 8)
+localparam L2S = $clog2(S);
+   
 // Synchronize control signals
 reg [18:0] ctl_r [1:0];
 
 always @(posedge clk)
 begin
-   ctl_r[0] = rst ? 0 : control;
-   ctl_r[1] = rst ? 0 : ctl_r[0];
+   ctl_r[0] = rst ? 1'b0 : control;
+   ctl_r[1] = rst ? 1'b0 : ctl_r[0];
 end
 
 // Front and back padding values and control signals
@@ -71,8 +74,8 @@ wire        ctl_run_w = ctl_r[1][0];
 
 // Only hashes out of phase 0 are valid except for the
 // 1st phase after run is enabled. Skip the 1st 8 cycles
-reg [3:0] valid_hash_r;
-wire valid_hash_w = valid_hash_r == 8;
+reg [4:0] valid_hash_r;
+wire valid_hash_w = valid_hash_r == 24;
 
 // Modulo 24 cycle counter
 reg [4:0] cycles_r;
@@ -114,16 +117,18 @@ assign rc_w[16] = 'h52; assign rc_w[17] = 'h48; assign rc_w[18] = 'h16; assign r
 assign rc_w[20] = 'h79; assign rc_w[21] = 'h58; assign rc_w[22] = 'h21; assign rc_w[23] = 'h74;
 
 // State stage interconnections.
-wire [1599:0] state_w [0:7];
+wire [1599:0] state_w [0:S - 1];
 
-// Current phase of 8 rounds (0-2). Easy divide by 8.
-wire [1:0] pass_w = cycles_r[4:3];
+// Current phase of 24 rounds (0 to L2S-1). Easy divide by S.
+wire [4 - L2S:0] pass_w = cycles_r[4:L2S];
+
+wire [L2S - 1:0] r_0_0_w = 0;
 
 // Special case, round 0 which has per pass input and simple rc calculation
 round r_0(
    .clk(clk),
-   .rc(rc_w[{pass_w, 3'b0}]),
-   .in(pass_w ? state_w[7] : {in_be_w, ctl_pad_w, 512'b0}), 
+   .rc(rc_w[{pass_w, r_0_0_w}]),
+   .in(pass_w ? state_w[S - 1] : {in_be_w, ctl_pad_w, 512'b0}), 
    .out(state_w[0])
 );
 
@@ -133,10 +138,10 @@ round r_0(
 genvar i;
 
 generate
-   for(i = 1; i < 8; i = i + 1)
+   for(i = 1; i < S; i = i + 1)
    begin : L3
       wire [4:0] t0 = cycles_r - i[4:0] + ((cycles_r < i) ? 5'd24 : 5'b0);
-      wire [4:0] t1 = {t0[4:3], i[2:0]}; // Calc RC value offset for this stage
+      wire [4:0] t1 = {t0[4:L2S], i[L2S - 1:0]}; // Calc RC value offset for this stage
       round r_n(
          .clk(clk),
          .rc(rc_w[t1]),
@@ -147,7 +152,7 @@ generate
 endgenerate
 
 // Final hash is the little endian upper 256 bits of sponge.
-wire [255:0] out_hash_be_w = state_w[7][1599:1600-256];
+wire [255:0] out_hash_be_w = state_w[S - 1][1599:1600-256];
 wire [255:0] out_hash_le_w;
 
 generate
@@ -162,7 +167,7 @@ endgenerate
 // Hash is less than or equal to difficulty
 wire match_w = (ctl_test_w ? (out_hash_le_w == difficulty) : (out_hash_le_w <= difficulty))
    && valid_hash_w && (pass_w == 0);
-
+	
 always @(posedge clk)
 begin
    if (rst | ~ctl_run_w) begin
@@ -179,7 +184,7 @@ begin
          cycles_r <= cycles_r == 5'd23 ? 5'b0 : cycles_r + 1'b1;
                            
          if ((match_w | ctl_halt_w) & valid_hash_w) begin
-            solution <= solution - 8; // control[0]Solution is 8 cycles old.
+            solution <= solution - S; // control[0]Solution is 8 cycles old.
             irq <= 1; // report match with IRQ and halt
          end
          else // Otherwise increment the nonce for the next cycle

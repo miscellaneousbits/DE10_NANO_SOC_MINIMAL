@@ -1,7 +1,5 @@
 module altera_edge_detector #(
-parameter PULSE_EXT = 0, // 0, 1 = edge detection generate single cycle pulse, >1 = pulse extended for specified clock cycle
-parameter EDGE_TYPE = 0, // 0 = falling edge, 1 or else = rising edge
-parameter IGNORE_RST_WHILE_BUSY = 0  // 0 = module internal reset will be default whenever rst_n asserted, 1 = rst_n request will be ignored while generating pulse out
+parameter PULSE_EXT = 0 // 0, 1 = edge detection generate single cycle pulse, >1 = pulse extended for specified clock cycle
 ) (
 input      clk,
 input      rst_n,
@@ -10,15 +8,13 @@ output     pulse_out
 );
 
 localparam IDLE = 0, ARM = 1, CAPT = 2;
-localparam SIGNAL_ASSERT   = EDGE_TYPE ? 1'b1 : 1'b0;
-localparam SIGNAL_DEASSERT = EDGE_TYPE ? 1'b0 : 1'b1;
+localparam SIGNAL_ASSERT   = 1'b1;
+localparam SIGNAL_DEASSERT = 1'b0;
 
 reg [1:0] state, next_state;
 reg       pulse_detect;
-wire      busy_pulsing;
 
-assign busy_pulsing = (IGNORE_RST_WHILE_BUSY)? pulse_out : 1'b0;
-assign reset_qual_n = rst_n | busy_pulsing;
+assign reset_qual_n = rst_n | pulse_out;
 
 generate
 if (PULSE_EXT > 1) begin: pulse_extend
@@ -35,17 +31,7 @@ if (PULSE_EXT > 1) begin: pulse_extend
       end
     end
   assign pulse_out = |extend_pulse;
-  end
-else begin: single_pulse
-  reg pulse_reg;
-  always @(posedge clk or negedge reset_qual_n) begin
-    if (!reset_qual_n)
-      pulse_reg <= 1'b0;
-    else
-      pulse_reg <= pulse_detect;
-    end
-  assign pulse_out = pulse_reg;
-  end
+end
 endgenerate
 
 always @(posedge clk) begin

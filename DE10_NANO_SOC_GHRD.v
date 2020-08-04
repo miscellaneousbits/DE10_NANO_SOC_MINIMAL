@@ -200,9 +200,7 @@ debounce #(
 );
 
 altera_edge_detector #(
-	.PULSE_EXT(6),
-	.EDGE_TYPE(1),
-	.IGNORE_RST_WHILE_BUSY(1)
+	.PULSE_EXT(6)
 ) pulse_cold_reset(
 	.clk(FPGA_CLK1_50),
 	.rst_n(hps_fpga_reset_n),
@@ -211,9 +209,7 @@ altera_edge_detector #(
 );
 
 altera_edge_detector #(
-	.PULSE_EXT(2),
-	.EDGE_TYPE(1),
-	.IGNORE_RST_WHILE_BUSY(1)
+	.PULSE_EXT(2)
 ) pulse_warm_reset(
 	.clk(FPGA_CLK1_50),
 	.rst_n(hps_fpga_reset_n),
@@ -222,9 +218,7 @@ altera_edge_detector #(
 );
 
 altera_edge_detector #(
-	.PULSE_EXT(32),
-	.EDGE_TYPE(1),
-	.IGNORE_RST_WHILE_BUSY(1)
+	.PULSE_EXT(32)
 ) pulse_debug_reset(
 	.clk(FPGA_CLK1_50),
 	.rst_n(hps_fpga_reset_n),

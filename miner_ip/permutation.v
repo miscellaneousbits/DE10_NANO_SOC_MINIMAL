@@ -31,14 +31,7 @@ module permutation (
 `define rot_up(in, n) {in[63-n:0], in[63:63-n+1]}
 `define rot_up_1(in)  {in[62:0], in[63]}
 
-// "a ~ g" for round 1
 wire [63:0] a[4:0][4:0];
-wire [63:0] b[4:0];
-wire [63:0] c[4:0][4:0];
-wire [63:0] d[4:0][4:0];
-wire [63:0] e[4:0][4:0];
-wire [63:0] f[4:0][4:0];
-wire [63:0] g[4:0][4:0];
 
 genvar x, y;
 
@@ -51,6 +44,7 @@ generate
    end
 endgenerate
 
+wire [63:0] b[4:0];
 
 // calc "b[x] == a[x][0] ^ a[x][1] ^ ... ^ a[x][4]"
 generate    
@@ -58,6 +52,8 @@ generate
       assign b[x] = a[x][0] ^ a[x][1] ^ a[x][2] ^ a[x][3] ^ a[x][4];
    end
 endgenerate
+
+wire [63:0] c[4:0][4:0];
 
 // calc "c == theta(a)"
 generate    
@@ -67,6 +63,8 @@ generate
       end
    end
 endgenerate
+
+wire [63:0] d[4:0][4:0];
 
 // calc "d == rho(c)"
 assign d[0][0] = c[0][0];
@@ -95,6 +93,8 @@ assign d[2][4] = `rot_up(c[2][4], 61);
 assign d[3][4] = `rot_up(c[3][4], 56);
 assign d[4][4] = `rot_up(c[4][4], 14);
 
+wire [63:0] e[4:0][4:0];
+
 // calc "e == pi(d)"
 assign e[0][0] = d[0][0];
 assign e[0][2] = d[1][0];
@@ -122,6 +122,8 @@ assign e[4][1] = d[2][4];
 assign e[4][3] = d[3][4];
 assign e[4][0] = d[4][4];
 
+wire [63:0] f[4:0][4:0];
+
 // calc "f = chi(e)"
 generate    
    for(y=0; y<5; y=y+1) begin : L5
@@ -131,20 +133,21 @@ generate
    end
 endgenerate
 
-// calc "g = iota(f)"
-assign g[0][0][0]  = f[0][0][0] ^ round_const[0];
-assign g[0][0][1]  = f[0][0][1] ^ round_const[1];
-assign g[0][0][3]  = f[0][0][3] ^ round_const[2];
-assign g[0][0][7]  = f[0][0][7] ^ round_const[3];
-assign g[0][0][15] = f[0][0][15] ^ round_const[4];
-assign g[0][0][31] = f[0][0][31] ^ round_const[5];
-assign g[0][0][63] = f[0][0][63] ^ round_const[6];
+wire [63:0] g[4:0][4:0];
 
-assign g[0][0][2] = f[0][0][2];
-assign g[0][0][6:4] = f[0][0][6:4];
-assign g[0][0][14:8] = f[0][0][14:8];
+// calc "g = iota(f)"
+assign g[0][0][0]     = f[0][0][0] ^ round_const[0];
+assign g[0][0][1]     = f[0][0][1] ^ round_const[1];
+assign g[0][0][2]     = f[0][0][2];
+assign g[0][0][3]     = f[0][0][3] ^ round_const[2];
+assign g[0][0][6:4]   = f[0][0][6:4];
+assign g[0][0][7]     = f[0][0][7] ^ round_const[3];
+assign g[0][0][14:8]  = f[0][0][14:8];
+assign g[0][0][15]    = f[0][0][15] ^ round_const[4];
 assign g[0][0][30:16] = f[0][0][30:16];
+assign g[0][0][31]    = f[0][0][31] ^ round_const[5];
 assign g[0][0][62:32] = f[0][0][62:32];
+assign g[0][0][63]    = f[0][0][63] ^ round_const[6];
 
 generate    
    for(y=0; y<5; y=y+1) begin : L7

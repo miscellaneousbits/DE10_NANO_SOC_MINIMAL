@@ -34,6 +34,7 @@ module miner (
 parameter MINER_CLK_MHZ = "60 MHz";
 parameter MINER_MAJ_VER = 0;
 parameter MINER_MIN_VER = 0;
+parameter STAGES = 8;
 
 // clunky way of converting string to integer
 wire [6 * 8 - 1:0] miner_clk_mhz_w = MINER_CLK_MHZ;
@@ -63,6 +64,7 @@ wire [7:0] miner_mhz_w = (4'd10 * tens) + ones;
 // 0     - found
 // 1     - running
 // 2     - testing
+// 6:3   - # of pipeline stages
 // 15:8  - miner freq.
 // 19:16 - miner major version
 // 23:20 - miner minor version
@@ -86,7 +88,7 @@ reg [31:0] data_r [4:22];
 
 // Read only registersminer_clk
 wire [63:0] solution_w;
-wire [2:0]  status_w;
+wire [6:0]  status_w;
 
 // IRQ state
 wire irq_w;
@@ -119,7 +121,7 @@ begin
             SOLN_REG + 1: readdata <= solution_w[63:32];
             STAT_REG:
                begin
-                  readdata[2:0] <= status_w;
+                  readdata[6:0] <= status_w;
                   readdata[15:8] <= miner_mhz_w;
                   readdata[19:16] <= MINER_MAJ_VER;
                   readdata[23:20] <= MINER_MIN_VER;
@@ -176,7 +178,10 @@ altera_pll #(
 );
 
 // SHA3_REG-256 mining core
-sha3_256_miner sha3_256_miner (
+sha3_256_miner #(
+   .STAGES(STAGES)
+)
+sha3_256_miner (
    .clk(miner_clk_w & miner_clk_lock_w),
    .rst(rst),
    .header(header_w),

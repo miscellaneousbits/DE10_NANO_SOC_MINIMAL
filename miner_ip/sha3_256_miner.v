@@ -49,11 +49,13 @@ module sha3_256_miner (
    input       [63:0]   start_nonce,
    input       [18:0]   control,
    output reg  [63:0]   solution,
-   output      [2:0]    status,
+   output      [6:0]    status,
    output reg           irq
 );
 
-localparam S = 8; // Stages (2, 4, or 8)
+parameter STAGES = 8; // Stages (2, 4, or 8)
+
+localparam S = STAGES;
 localparam L2S = $clog2(S);
    
 // Synchronize control signals
@@ -81,7 +83,8 @@ wire valid_hash_w = valid_hash_r == 24;
 reg [4:0] cycles_r;
 
 // Current status
-assign status = {ctl_test_w, ctl_run_w, irq & ~ctl_halt_w};
+wire [3:0] stages_w = S;
+assign status = {stages_w, ctl_test_w, ctl_run_w, irq & ~ctl_halt_w};
 
 // Constant 768 bit pad
 wire [767:0] ctl_pad_w = {56'b0, ctl_padf_w, 640'b0, ctl_padl_w, 56'b0};

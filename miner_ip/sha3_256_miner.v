@@ -99,15 +99,15 @@ wire [319:0] in_be_w;
 `define high_bit(w,b)  (`low_bit(w,b) + 7)
 `define high_bit2(w,b) (`low_bit2(w,b) + 7)
 
-genvar w, b;
+genvar i, w, b;
 
 // Convert the input data
 generate
-   for(w = 0; w < 5; w = w + 1) begin : L0
-      for(b = 0; b < 8; b = b + 1) begin : L1
-         assign in_be_w[`high_bit(w,b):`low_bit(w,b)] = in_le_w[`high_bit2(w,b):`low_bit2(w,b)];
-      end
+for(w = 0; w < 5; w = w + 1) begin : L0
+   for(b = 0; b < 8; b = b + 1) begin : L1
+      assign in_be_w[`high_bit(w,b):`low_bit(w,b)] = in_le_w[`high_bit2(w,b):`low_bit2(w,b)];
    end
+end
 endgenerate
 
 // Round constantts, bits 63, 31, 15, 7, 3, 1 and 0
@@ -138,20 +138,19 @@ round r_0(
 // Rounds 1-7 differ in that they always take their input from the previous
 // round, but use a delayed round calculation of the appropriate round
 // constant.   
-genvar i;
 
 generate
-   for(i = 1; i < S; i = i + 1)
-   begin : L3
-      wire [4:0] t0 = cycles_r - i[4:0] + ((cycles_r < i) ? 5'd24 : 5'b0);
-      wire [4:0] t1 = {t0[4:L2S], i[L2S - 1:0]}; // Calc RC value offset for this stage
-      round r_n(
-         .clk(clk),
-         .rc(rc_w[t1]),
-         .in(state_w[i - 1]),
-         .out(state_w[i])
-      );
-   end
+for(i = 1; i < S; i = i + 1)
+begin : L3
+   wire [4:0] t0 = cycles_r - i[4:0] + ((cycles_r < i) ? 5'd24 : 5'b0);
+   wire [4:0] t1 = {t0[4:L2S], i[L2S - 1:0]}; // Calc RC value offset for this stage
+   round r_n(
+      .clk(clk),
+      .rc(rc_w[t1]),
+      .in(state_w[i - 1]),
+      .out(state_w[i])
+   );
+end
 endgenerate
 
 // Final hash is the little endian upper 256 bits of sponge.
@@ -159,18 +158,18 @@ wire [255:0] out_hash_be_w = state_w[S - 1][1599:1600-256];
 wire [255:0] out_hash_le_w;
 
 generate
-   for(w = 0; w < 4; w = w + 1) begin : L4
-      for(b = 0; b < 8; b = b + 1) begin : L5
-         assign out_hash_le_w[`high_bit(w,b):`low_bit(w,b)] = out_hash_be_w[`high_bit2(w,b):`low_bit2(w,b)];
-      end
+for(w = 0; w < 4; w = w + 1) begin : L4
+   for(b = 0; b < 8; b = b + 1) begin : L5
+      assign out_hash_le_w[`high_bit(w,b):`low_bit(w,b)] = out_hash_be_w[`high_bit2(w,b):`low_bit2(w,b)];
    end
+end
 endgenerate
 
 
 // Hash is less than or equal to difficulty
 wire match_w = (ctl_test_w ? (out_hash_le_w == difficulty) : (out_hash_le_w <= difficulty))
    && valid_hash_w && (pass_w == 0);
-	
+   
 always @(posedge clk)
 begin
    if (rst | ~ctl_run_w) begin

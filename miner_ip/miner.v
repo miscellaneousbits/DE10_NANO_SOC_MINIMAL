@@ -28,7 +28,8 @@ module miner (
    input             write,
    input      [31:0] writedata,
    output reg [31:0] readdata,
-   output reg        irq
+   output reg        irq,
+	output            bsy
 );
 
 parameter MINER_CLK_MHZ = "60 MHz";
@@ -190,7 +191,8 @@ sha3_256_miner (
    .control(control_w),
    .solution(solution_w),
    .status(status_w),
-   .irq(irq_w)
+   .irq(irq_w),
+	.bsy(bsy)
 );
 
 endmodule

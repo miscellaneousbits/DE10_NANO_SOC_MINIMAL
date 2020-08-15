@@ -93,6 +93,10 @@ wire [2: 0] hps_reset_req;
 wire        hps_cold_reset;
 wire        hps_warm_reset;
 wire        hps_debug_reset;
+wire [6: 0] fpga_led_internal;
+wire        fpga_bsy;
+
+assign LED[7: 1] = fpga_led_internal;
 
 //=======================================================
 //  Structural coding
@@ -175,7 +179,7 @@ soc_system u0(
 	.hps_0_hps_io_hps_io_gpio_inst_GPIO54(HPS_KEY),              //                               .hps_io_gpio_inst_GPIO54
 	.hps_0_hps_io_hps_io_gpio_inst_GPIO61(HPS_GSENSOR_INT),      //                               .hps_io_gpio_inst_GPIO61
 	//FPGA Partion
-	.led_pio_external_connection_export(LED),                    //    led_pio_external_connection.export
+	.led_pio_external_connection_export(fpga_led_internal),      //    led_pio_external_connection.export
 	.dipsw_pio_external_connection_export(SW),                   //  dipsw_pio_external_connection.export
 	.button_pio_external_connection_export(fpga_debounced_buttons),
 																				    // button_pio_external_connection.export
@@ -183,8 +187,12 @@ soc_system u0(
 	.hps_0_h2f_reset_reset_n(hps_fpga_reset_n),                  //                hps_0_h2f_reset.reset_n
 	.hps_0_f2h_cold_reset_req_reset_n(~hps_cold_reset),          //       hps_0_f2h_cold_reset_req.reset_n
 	.hps_0_f2h_debug_reset_req_reset_n(~hps_debug_reset),        //      hps_0_f2h_debug_reset_req.reset_n
-	.hps_0_f2h_warm_reset_req_reset_n(~hps_warm_reset)           //       hps_0_f2h_warm_reset_req.reset_n
+	.hps_0_f2h_warm_reset_req_reset_n(~hps_warm_reset),          //       hps_0_f2h_warm_reset_req.reset_n
+	
+	.miner_0_conduit_bsy(fpga_bsy)
 );
+
+assign LED[0] = fpga_bsy;
 
 // Debounce logic to clean out glitches within 1ms
 debounce #(

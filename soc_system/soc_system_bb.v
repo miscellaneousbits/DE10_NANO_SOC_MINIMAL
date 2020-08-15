@@ -72,6 +72,7 @@ module soc_system (
 	memory_mem_odt,
 	memory_mem_dm,
 	memory_oct_rzqin,
+	miner_0_conduit_bsy,
 	reset_reset_n);	
 
 	input	[1:0]	button_pio_external_connection_export;
@@ -146,5 +147,6 @@ module soc_system (
 	output		memory_mem_odt;
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
+	output		miner_0_conduit_bsy;
 	input		reset_reset_n;
 endmodule

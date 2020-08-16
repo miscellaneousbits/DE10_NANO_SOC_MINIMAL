@@ -1,0 +1,48 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+
+	fragment@0 {
+		target-path = "/soc/base-fpga-region";
+                #address-cells = <0x1>;
+		#size-cells = <0x1>;
+
+		__overlay__ {
+			#address-cells = <0x2>;
+			#size-cells = <0x1>;
+			external-fpga-config;
+			fpga-bridges = <0xffffffff 0xffffffff>;
+			ranges = <0x0 0x0 0xc0000000 0x20000000 0x1 0x0 0xff200000 0x200000>;
+
+                        miner@100006000 {
+                                compatible = "cyr,miner-1.1", "dev,miner";
+                                reg = <0x00000001 0x00006000 0x00000080>;
+                                interrupt-parent = <0xffffffff>;
+                                interrupts = <0x0 0x28 0x4>;
+                                clocks = <0xffffffff>;
+                        };
+		};
+	};
+
+	__symbols__ {
+		miner_0 = "/fragment@0/__overlay__/miner@100006000";
+	};
+
+	__fixups__ {
+		intc = "/fragment@0/__overlay__/miner@100006000:interrupt-parent:0";
+	};
+
+	__local_fixups__ {
+
+		fragment@0 {
+
+			__overlay__ {
+
+				miner@100006000 {
+					clocks = <0x0>;
+				};
+			};
+		};
+	};
+};

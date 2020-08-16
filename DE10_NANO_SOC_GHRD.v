@@ -69,16 +69,7 @@ module DE10_NANO_SOC_GHRD(
 	inout    [ 7: 0]    HPS_USB_DATA,
 	input               HPS_USB_DIR,
 	input               HPS_USB_NXT,
-	output              HPS_USB_STP,
-
-	//////////// KEY //////////
-	input    [ 1: 0]    KEY,
-
-	//////////// LED //////////
-	output   [ 7: 0]    LED,
-
-	//////////// SW //////////
-	input    [ 3: 0]    SW
+	output              HPS_USB_STP
 	 
 );
 
@@ -93,10 +84,7 @@ wire [2: 0] hps_reset_req;
 wire        hps_cold_reset;
 wire        hps_warm_reset;
 wire        hps_debug_reset;
-wire [6: 0] fpga_led_internal;
-wire        fpga_bsy;
 
-assign LED[7: 1] = fpga_led_internal;
 
 //=======================================================
 //  Structural coding
@@ -177,34 +165,13 @@ soc_system u0(
 	.hps_0_hps_io_hps_io_gpio_inst_GPIO40(HPS_LTC_GPIO),         //                               .hps_io_gpio_inst_GPIO40
 	.hps_0_hps_io_hps_io_gpio_inst_GPIO53(HPS_LED),              //                               .hps_io_gpio_inst_GPIO53
 	.hps_0_hps_io_hps_io_gpio_inst_GPIO54(HPS_KEY),              //                               .hps_io_gpio_inst_GPIO54
-	.hps_0_hps_io_hps_io_gpio_inst_GPIO61(HPS_GSENSOR_INT),      //                               .hps_io_gpio_inst_GPIO61
-	//FPGA Partion
-	.led_pio_external_connection_export(fpga_led_internal),      //    led_pio_external_connection.export
-	.dipsw_pio_external_connection_export(SW),                   //  dipsw_pio_external_connection.export
-	.button_pio_external_connection_export(fpga_debounced_buttons),
+	.hps_0_hps_io_hps_io_gpio_inst_GPIO61(HPS_GSENSOR_INT),
 																				    // button_pio_external_connection.export
 	
 	.hps_0_h2f_reset_reset_n(hps_fpga_reset_n),                  //                hps_0_h2f_reset.reset_n
 	.hps_0_f2h_cold_reset_req_reset_n(~hps_cold_reset),          //       hps_0_f2h_cold_reset_req.reset_n
 	.hps_0_f2h_debug_reset_req_reset_n(~hps_debug_reset),        //      hps_0_f2h_debug_reset_req.reset_n
-	.hps_0_f2h_warm_reset_req_reset_n(~hps_warm_reset),          //       hps_0_f2h_warm_reset_req.reset_n
-	
-	.miner_0_conduit_bsy(fpga_bsy)
-);
-
-assign LED[0] = fpga_bsy;
-
-// Debounce logic to clean out glitches within 1ms
-debounce #(
-	.WIDTH(2),
-	.POLARITY("LOW"),
-	.TIMEOUT(50000),              // at 50Mhz this is a debounce time of 1ms
-	.TIMEOUT_WIDTH(16)            // ceil(log2(TIMEOUT))
-) inst (
-	.clk(FPGA_CLK1_50),
-	.reset_n(hps_fpga_reset_n),
-	.data_in(KEY),
-	.data_out(fpga_debounced_buttons)
+	.hps_0_f2h_warm_reset_req_reset_n(~hps_warm_reset)
 );
 
 altera_edge_detector #(

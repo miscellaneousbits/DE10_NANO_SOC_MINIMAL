@@ -1,3 +1,3 @@
 #!/bin/bash
 echo copying rbf, and dtb
-scp output_files/DE10_NANO_SOC_GHRD.rbf root@de10nano:DE10_NANO_SOC_GHRD.rbf
+scp output_files/DE10_NANO_SOC_GHRD.rbf overlay.dtbo root@de10nano:

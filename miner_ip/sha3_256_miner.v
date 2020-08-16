@@ -50,8 +50,7 @@ module sha3_256_miner (
    input       [18:0]   control,
    output reg  [63:0]   solution,
    output      [6:0]    status,
-   output reg           irq,
-	output               bsy
+   output reg           irq
 );
 
 parameter STAGES = 8; // Stages (2, 4, or 8)
@@ -86,8 +85,6 @@ reg [4:0] cycles_r;
 // Current status
 wire [3:0] stages_w = S;
 assign status = {stages_w, ctl_test_w, ctl_run_w, irq & ~ctl_halt_w};
-
-assign bsy = ctl_run_w & ~irq & ~ctl_halt_w;
 
 // Constant 768 bit pad
 wire [767:0] ctl_pad_w = {56'b0, ctl_padf_w, 640'b0, ctl_padl_w, 56'b0};

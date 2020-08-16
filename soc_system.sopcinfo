@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2020.08.16.10:42:38 -->
+ <!-- 2020.08.16.15:05:35 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1597588957</value>
+  <value>1597604729</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -16928,14 +16928,14 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s0</slaveName>
     <name>mm_bridge_0.s0</name>
     <baseAddress>0</baseAddress>
-    <span>32768</span>
+    <span>128</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
     <moduleName>miner_0</moduleName>
     <slaveName>sl</slaveName>
     <name>miner_0.sl</name>
-    <baseAddress>24576</baseAddress>
+    <baseAddress>0</baseAddress>
     <span>128</span>
    </memoryBlock>
   </interface>
@@ -43742,14 +43742,14 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s0</slaveName>
     <name>mm_bridge_0.s0</name>
     <baseAddress>0</baseAddress>
-    <span>32768</span>
+    <span>128</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
     <moduleName>miner_0</moduleName>
     <slaveName>sl</slaveName>
     <name>miner_0.sl</name>
-    <baseAddress>24576</baseAddress>
+    <baseAddress>0</baseAddress>
     <span>128</span>
    </memoryBlock>
   </interface>
@@ -45277,14 +45277,14 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s0</slaveName>
     <name>mm_bridge_0.s0</name>
     <baseAddress>4280287232</baseAddress>
-    <span>32768</span>
+    <span>128</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
     <moduleName>miner_0</moduleName>
     <slaveName>sl</slaveName>
     <name>miner_0.sl</name>
-    <baseAddress>4280311808</baseAddress>
+    <baseAddress>4280287232</baseAddress>
     <span>128</span>
    </memoryBlock>
    <memoryBlock>
@@ -46116,14 +46116,14 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s0</slaveName>
     <name>mm_bridge_0.s0</name>
     <baseAddress>4280287232</baseAddress>
-    <span>32768</span>
+    <span>128</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
     <moduleName>miner_0</moduleName>
     <slaveName>sl</slaveName>
     <name>miner_0.sl</name>
-    <baseAddress>4280311808</baseAddress>
+    <baseAddress>4280287232</baseAddress>
     <span>128</span>
    </memoryBlock>
    <memoryBlock>
@@ -74357,7 +74357,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SYSINFO_ADDR_WIDTH">
    <type>int</type>
-   <value>15</value>
+   <value>7</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -74375,7 +74375,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="AUTO_ADDRESS_WIDTH">
    <type>int</type>
-   <value>15</value>
+   <value>7</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -74383,7 +74383,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="HDL_ADDR_WIDTH">
    <type>int</type>
-   <value>15</value>
+   <value>7</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -74593,7 +74593,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>32768</value>
+    <value>128</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -74922,7 +74922,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>s0_address</name>
     <direction>Input</direction>
-    <width>15</width>
+    <width>7</width>
     <role>address</role>
    </port>
    <port>
@@ -75245,7 +75245,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>m0_address</name>
     <direction>Output</direction>
-    <width>15</width>
+    <width>7</width>
     <role>address</role>
    </port>
    <port>
@@ -75277,7 +75277,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>miner_0</moduleName>
     <slaveName>sl</slaveName>
     <name>miner_0.sl</name>
-    <baseAddress>24576</baseAddress>
+    <baseAddress>0</baseAddress>
     <span>128</span>
    </memoryBlock>
   </interface>
@@ -85475,7 +85475,7 @@ parameters are a RESULT of the module parameters. -->
   </parameter>
   <parameter name="baseAddress">
    <type>java.math.BigInteger</type>
-   <value>0x6000</value>
+   <value>0x0000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>

@@ -1,3 +1,7 @@
 #!/bin/bash
-echo copying rbf, and dtb
+echo creating rbf
+./makerbf || exit -1
+echo creating dtbo
+./makedtbo || exit -1
+echo copying rbf, and dtbo to de10nano
 scp output_files/DE10_NANO_SOC_GHRD.rbf overlay.dtbo root@de10nano:

@@ -56,6 +56,7 @@ module sha3_256_miner (
 
 parameter STAGES = 8; // Stages (2, 4, or 8)
 
+localparam SHA3_STAGES = 24;
 localparam S = STAGES;
 localparam L2S = $clog2(S);
    
@@ -78,7 +79,7 @@ wire        ctl_run_w = ctl_r[1][0];
 // Only hashes out of phase 0 are valid except for the
 // 1st phase after run is enabled. Skip the 1st 8 cycles
 reg [4:0] valid_hash_r;
-wire valid_hash_w = valid_hash_r == 24;
+wire valid_hash_w = valid_hash_r == 0;
 
 // Modulo 24 cycle counter
 reg [4:0] cycles_r;
@@ -145,7 +146,7 @@ round r_0(
 generate
 for(i = 1; i < S; i = i + 1)
 begin : L3
-   wire [4:0] t0 = cycles_r - i[4:0] + ((cycles_r < i) ? 5'd24 : 5'b0);
+   wire [4:0] t0 = cycles_r - i[4:0] + ((cycles_r < i) ? SHA3_STAGES : 5'b0);
    wire [4:0] t1 = {t0[4:L2S], i[L2S - 1:0]}; // Calc RC value offset for this stage
    round r_n(
       .clk(clk),
@@ -177,16 +178,16 @@ always @(posedge clk)
 begin
    if (rst | ~ctl_run_w) begin
       irq <= 0;
-      valid_hash_r <= -1;
+      valid_hash_r <= SHA3_STAGES;
       cycles_r <= -1;
       solution <= start_nonce;
    end
    else begin
       if (!irq) begin
          // Count up to 8 (end of 1st phase)
-         valid_hash_r <= valid_hash_w ? valid_hash_r : valid_hash_r + 1'b1;
+         valid_hash_r <= valid_hash_w ? 5'b0 : valid_hash_r - 1'b1;
          // Modulo 24 cycle count
-         cycles_r <= cycles_r == 5'd23 ? 5'b0 : cycles_r + 1'b1;
+         cycles_r <= cycles_r == (SHA3_STAGES - 1) ? 5'b0 : cycles_r + 1'b1;
                            
          if ((match_w | ctl_halt_w) & valid_hash_w) begin
             solution <= solution - S; // control[0]Solution is 8 cycles old.

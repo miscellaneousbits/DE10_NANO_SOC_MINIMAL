@@ -9,32 +9,6 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element button_pio
-   {
-      datum _sortIndex
-      {
-         value = "3";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element button_pio.s1
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "20480";
-         type = "String";
-      }
-   }
    element clk_0
    {
       datum _sortIndex
@@ -46,40 +20,6 @@
       {
          value = "1";
          type = "boolean";
-      }
-   }
-   element dipsw_pio
-   {
-      datum _sortIndex
-      {
-         value = "4";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element dipsw_pio.external_connection
-   {
-      datum _tags
-      {
-         value = "";
-         type = "String";
-      }
-   }
-   element dipsw_pio.s1
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "16384";
-         type = "String";
       }
    }
    element hps_0
@@ -103,37 +43,11 @@
          type = "String";
       }
    }
-   element led_pio
-   {
-      datum _sortIndex
-      {
-         value = "5";
-         type = "int";
-      }
-      datum sopceditor_expanded
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element led_pio.s1
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "12288";
-         type = "String";
-      }
-   }
    element miner_0
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "3";
          type = "int";
       }
    }
@@ -206,17 +120,7 @@
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
- <interface
-   name="button_pio_external_connection"
-   internal="button_pio.external_connection"
-   type="conduit"
-   dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
- <interface
-   name="dipsw_pio_external_connection"
-   internal="dipsw_pio.external_connection"
-   type="conduit"
-   dir="end" />
  <interface
    name="hps_0_f2h_cold_reset_req"
    internal="hps_0.f2h_cold_reset_req"
@@ -240,51 +144,14 @@
    dir="start" />
  <interface name="hps_0_h2f_user0_clock" internal="hps_0.h2f_user0_clock" />
  <interface name="hps_0_hps_io" internal="hps_0.hps_io" type="conduit" dir="end" />
- <interface
-   name="led_pio_external_connection"
-   internal="led_pio.external_connection"
-   type="conduit"
-   dir="end" />
  <interface name="memory" internal="hps_0.memory" type="conduit" dir="end" />
- <interface
-   name="miner_0_conduit"
-   internal="miner_0.conduit"
-   type="conduit"
-   dir="end" />
+ <interface name="miner_0_conduit" internal="miner_0.conduit" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
- <module name="button_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
-  <parameter name="bitClearingEdgeCapReg" value="true" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="true" />
-  <parameter name="clockRate" value="50000000" />
-  <parameter name="direction" value="Input" />
-  <parameter name="edgeType" value="FALLING" />
-  <parameter name="generateIRQ" value="true" />
-  <parameter name="irqType" value="EDGE" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="2" />
- </module>
  <module name="clk_0" kind="clock_source" version="18.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
- </module>
- <module name="dipsw_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
-  <parameter name="bitClearingEdgeCapReg" value="true" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="true" />
-  <parameter name="clockRate" value="50000000" />
-  <parameter name="direction" value="Input" />
-  <parameter name="edgeType" value="ANY" />
-  <parameter name="generateIRQ" value="true" />
-  <parameter name="irqType" value="EDGE" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="4" />
  </module>
  <module name="hps_0" kind="altera_hps" version="18.1" enabled="1">
   <parameter name="ABSTRACT_REAL_COMPARE_TEST" value="false" />
@@ -816,22 +683,8 @@
   <parameter name="usb_mp_clk_div" value="0" />
   <parameter name="use_default_mpu_clk" value="true" />
  </module>
- <module name="led_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
-  <parameter name="bitClearingEdgeCapReg" value="false" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="50000000" />
-  <parameter name="direction" value="Output" />
-  <parameter name="edgeType" value="RISING" />
-  <parameter name="generateIRQ" value="false" />
-  <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="255" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="8" />
- </module>
  <module name="miner_0" kind="miner" version="1.1" enabled="1">
-  <parameter name="MINER_CLK_MHZ" value="75 MHz" />
+  <parameter name="MINER_CLK_MHZ" value="90 MHz" />
   <parameter name="MINER_MAJ_VER" value="1" />
   <parameter name="MINER_MIN_VER" value="1" />
   <parameter name="STAGES" value="8" />
@@ -863,37 +716,11 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="avalon" version="18.1" start="mm_bridge_0.m0" end="led_pio.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x3000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="18.1"
-   start="mm_bridge_0.m0"
-   end="dipsw_pio.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x4000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="18.1"
-   start="mm_bridge_0.m0"
-   end="button_pio.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x5000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection kind="avalon" version="18.1" start="mm_bridge_0.m0" end="miner_0.sl">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x6000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="clock" version="18.1" start="clk_0.clk" end="led_pio.clk" />
- <connection kind="clock" version="18.1" start="clk_0.clk" end="dipsw_pio.clk" />
- <connection kind="clock" version="18.1" start="clk_0.clk" end="button_pio.clk" />
  <connection kind="clock" version="18.1" start="clk_0.clk" end="mm_bridge_0.clk" />
  <connection kind="clock" version="18.1" start="clk_0.clk" end="miner_0.clk" />
  <connection
@@ -915,38 +742,9 @@
    kind="interrupt"
    version="18.1"
    start="hps_0.f2h_irq0"
-   end="button_pio.irq">
-  <parameter name="irqNumber" value="1" />
- </connection>
- <connection
-   kind="interrupt"
-   version="18.1"
-   start="hps_0.f2h_irq0"
-   end="dipsw_pio.irq">
+   end="miner_0.irq">
   <parameter name="irqNumber" value="0" />
  </connection>
- <connection
-   kind="interrupt"
-   version="18.1"
-   start="hps_0.f2h_irq0"
-   end="miner_0.irq">
-  <parameter name="irqNumber" value="2" />
- </connection>
- <connection
-   kind="reset"
-   version="18.1"
-   start="clk_0.clk_reset"
-   end="led_pio.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="clk_0.clk_reset"
-   end="dipsw_pio.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="clk_0.clk_reset"
-   end="button_pio.reset" />
  <connection
    kind="reset"
    version="18.1"

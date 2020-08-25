@@ -54,9 +54,9 @@ module sha3_256_miner (
 	output               bsy
 );
 
-parameter STAGES = 8; // Stages (2, 4, or 8)
+parameter [3:0] STAGES = 8; // Stages (2, 4, or 8)
 
-localparam SHA3_STAGES = 24;
+localparam [4:0] SHA3_STAGES = 24;
 localparam S = STAGES;
 localparam L2S = $clog2(S);
    
@@ -179,7 +179,7 @@ begin
    if (rst | ~ctl_run_w) begin
       irq <= 0;
       valid_hash_r <= SHA3_STAGES;
-      cycles_r <= -1;
+      cycles_r <= 5'b11111;
       solution <= start_nonce;
    end
    else begin

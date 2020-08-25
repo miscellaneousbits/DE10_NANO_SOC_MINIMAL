@@ -33,9 +33,9 @@ module miner (
 );
 
 parameter MINER_CLK_MHZ = "60 MHz";
-parameter MINER_MAJ_VER = 0;
-parameter MINER_MIN_VER = 0;
-parameter STAGES = 8;
+parameter [3:0] MINER_MAJ_VER = 0;
+parameter [3:0] MINER_MIN_VER = 0;
+parameter [3:0] STAGES = 8;
 
 // clunky way of converting string to integer
 wire [6 * 8 - 1:0] miner_clk_mhz_w = MINER_CLK_MHZ;

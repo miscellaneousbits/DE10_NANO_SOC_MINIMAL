@@ -193,7 +193,7 @@ altera_edge_detector #(
 );
 
 altera_edge_detector #(
-	.PULSE_EXT(32)
+	.PULSE_EXT(31)
 ) pulse_debug_reset(
 	.clk(FPGA_CLK1_50),
 	.rst_n(hps_fpga_reset_n),

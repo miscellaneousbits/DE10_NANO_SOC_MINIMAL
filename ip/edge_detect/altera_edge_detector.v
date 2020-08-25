@@ -1,5 +1,5 @@
 module altera_edge_detector #(
-parameter PULSE_EXT = 0 // 0, 1 = edge detection generate single cycle pulse, >1 = pulse extended for specified clock cycle
+parameter [4:0] PULSE_EXT = 0 // 0, 1 = edge detection generate single cycle pulse, >1 = pulse extended for specified clock cycle
 ) (
 input      clk,
 input      rst_n,
@@ -11,55 +11,24 @@ localparam IDLE = 0, ARM = 1, CAPT = 2;
 localparam SIGNAL_ASSERT   = 1'b1;
 localparam SIGNAL_DEASSERT = 1'b0;
 
-reg [1:0] state, next_state;
-reg       pulse_detect;
+reg [1:0] pulse_detect;
+always @(posedge clk)
+   pulse_detect <= rst_n ? {pulse_detect[0], signal_in} : 2'b0;
 
-assign reset_qual_n = rst_n | pulse_out;
-
-reg [PULSE_EXT-1:0] extend_pulse;
-
-always @(posedge clk or negedge reset_qual_n)
+reg [4:0] pulse_count;
+always @(posedge clk)
 begin
-	if (!reset_qual_n)
-		extend_pulse <= {{PULSE_EXT}{1'b0}};
+	if (!rst_n)
+		pulse_count <= 1'b0;
 	else
-		extend_pulse = {extend_pulse[PULSE_EXT-2:0], pulse_detect};
+	begin
+	   if (pulse_detect == 2'b10)
+			pulse_count <= PULSE_EXT;
+		else
+	      pulse_count <= pulse_count ? pulse_count - 1'b1 : 1'b0;
+	end
 end
-
-assign pulse_out = | extend_pulse;
-
-always @(posedge clk) begin
-  if (!rst_n)
-    state <= IDLE;
-  else
-    state <= next_state;
-end
-
-// edge detect
-always @(*) begin
-	next_state = state;
-	pulse_detect = 1'b0;
-	case (state)
-	IDLE : begin
-		  pulse_detect = 1'b0;
-		  if (signal_in == SIGNAL_DEASSERT) next_state = ARM;
-		  else next_state = IDLE;
-		  end
-	ARM  : begin
-		  pulse_detect = 1'b0;
-		  if (signal_in == SIGNAL_ASSERT)   next_state = CAPT;
-		  else next_state = ARM;
-		  end
-	CAPT : begin
-		  pulse_detect = 1'b1;
-		  if (signal_in == SIGNAL_DEASSERT) next_state = ARM;
-		  else next_state = IDLE;
-		  end
-	default : begin
-		  pulse_detect = 1'b0;
-		  next_state = IDLE;
-		  end
-	endcase
-end
+	
+assign pulse_out = | pulse_count;
 
 endmodule

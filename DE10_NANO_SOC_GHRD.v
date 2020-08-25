@@ -175,7 +175,7 @@ soc_system u0(
 );
 
 edge_detector #(
-	.PULSE_EXT(6)
+	.EXTEND(7)
 ) pulse_cold_reset(
 	.clk(FPGA_CLK1_50),
 	.rst_n(hps_fpga_reset_n),
@@ -184,7 +184,7 @@ edge_detector #(
 );
 
 edge_detector #(
-	.PULSE_EXT(2)
+	.EXTEND(3)
 ) pulse_warm_reset(
 	.clk(FPGA_CLK1_50),
 	.rst_n(hps_fpga_reset_n),
@@ -193,7 +193,7 @@ edge_detector #(
 );
 
 edge_detector #(
-	.PULSE_EXT(31)
+	.EXTEND(15)
 ) pulse_debug_reset(
 	.clk(FPGA_CLK1_50),
 	.rst_n(hps_fpga_reset_n),

@@ -46,8 +46,9 @@ A Quartus project is presented for the
 a low cost FPGA development board equipped with an Intel 5CSEBA6U23I7NDK FPGA. The FPGA includes a dual
 core ARM hard processor able to run Linux, used in
 [this](https://github.com/miscellaneousbits/linux-socfpga-sha3-miner.git)
-project to test the core.  The low cost Cyclone V FPGA can produce and verify over 25 million hashes
-per second using under 5 watts of power.
+project to test the core.  The low cost Cyclone V FPGA can produce and verify over 30 million hashes
+per second using 10 watts of power. Not great, could do much better with a faster FPGA and
+specialized PCB. There's lots of unneeded stuff on the DE10 NANO.
 
 An 8 stage pipeline design is used in three phases since a fully unrolled
 24 stage pipeline exceeds the capacity of this FPGA.
@@ -116,7 +117,7 @@ in directory **miner_ip**.
 
 - DE10-NANO
 - X86 Desk/Laptop (Windows or Linux Ubuntu/Debian) to run Quartus.
-- Quartus 20.1 Free Edition, available [here](https://fpgasoftware.intel.com/?edition=lite)
+- Quartus 18.1 Free Edition, available [here](https://fpgasoftware.intel.com/?edition=lite)
 - Intel SoC FPGA Embedded Development Suite Standard Edition, available [here](https://fpgasoftware.intel.com/soceds/20.1/?edition=standard)
 
 ### Synthesizing
@@ -140,120 +141,130 @@ SD card image.
 
 
 ```
-root@de10nano:~# linux-socfpga-sha3-miner/tools/testing/miner/test
+root@de10nano:~# cd linux-socfpga-sha3-miner/tools/testing/miner/
+root@de10nano:~/linux-socfpga-sha3-miner/tools/testing/miner# make
+main.c -> main.o
+sha3.c -> sha3.o
+main.o sha3.o -> test
+root@de10nano:~/linux-socfpga-sha3-miner/tools/testing/miner# ./test
 
-Poll test
-Test 0 4c4a10a77c3e1b04 ................................................
-Test 1 732f25c31959b540 ................................................
-Test 2 29c76192315058f4 ................................................
-Test 3 013827a1499b689e ................................................
-Test 4 5cebbb8d7af619a1 ................................................
-Test 5 480ce24d0ae918a7 ................................................
-Test 6 7a61393862b20594 ................................................
-Test 7 696a459854359e1b ................................................
-Test 8 588af1700eddb841 ................................................
-Test 9 7d7db9d074160313 ................................................
+Permutation stage test
+
+Test 0 407e0758049d0b43 ................................................
+Test 1 582acaed0a5b2461 ................................................
+Test 2 783c26f63f572ed8 ................................................
+Test 3 6b4d3be558640236 ................................................
+Test 4 100e19fc5bb454bc ................................................
+Test 5 472bec212ebc9746 ................................................
+Test 6 4a4ceb022c632c02 ................................................
+Test 7 4769389949d7c4e6 ................................................
+Test 8 402ecfda45b559ed ................................................
+Test 9 263cc2ad13c68104 ................................................
 PASS
 
 Interrupt test
-Test 0 1a8fe6bc4e5f2e6f ................................................
-Test 1 790374e16769b24d ................................................
-Test 2 67d49c584fa2b3e3 ................................................
-Test 3 7f88fb0a00a41faa ................................................
-Test 4 48199b6338346a2e ................................................
-Test 5 1f300ac01cecf76b ................................................
-Test 6 10dda66077e1addb ................................................
-Test 7 2cfb613530ea97ba ................................................
-Test 8 3bbff0960a7d0a68 ................................................
-Test 9 6b7c039f0977d199 ................................................
+
+Test 0 1c39c47e0a343594 ................................................
+Test 1 5774c4a41d654b74 ................................................
+Test 2 38cd2c903d4f61a8 ................................................
+Test 3 64ba1fdb75250e7d ................................................
+Test 4 230a37d027d8fc18 ................................................
+Test 5 7fa75b5279c17342 ................................................
+Test 6 44141d410d935089 ................................................
+Test 7 7f86870c3fe0fa5d ................................................
+Test 8 273b032b331bfb8e ................................................
+Test 9 56c541f173231eb6 ................................................
 PASS
 
-Checking hash rate
-Miner clock 75 MHz, expected hash rate 25.00 MH/S
-Measured 25.00 MH/S, PASS
+Hash rate test
+
+Miner clock 93 MHz, pipeline stages 8, expected hash rate 31.00 MH/S
+Measured 31.00 MH/S
+PASS
 
 Mining test
 
 Search 1
-Header:   669cb81b17a4ad27311933723db2ce50b9b0720c59ba5f7fcc7d59081c002a25
-Start:    0317f6645c0b0e72
-Solution: 0317f664747ca296 (410,096,676 hashes)
-Hash:     000000058c399aff34d21ef6ae481059621ede2237a510ac3c2fd4ac991b2807
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     8c70c521f02d6c0d2e5bf63c580e19596006ee44a2f78b59639f37221457f31f
+Start:      59dc07574dc801a2
+Solution:   59dc075750f39248 (53,186,726 hashes)
+Hash:       0000000189ffbac8ce8d11e655a700ab78892d379227becac54fdbed98f2fa78
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 2
-Header:   495b3e3e30858344bb963d16ba26e35abd08ee1cd8294e7b85244427dfa23071
-Start:    0dad3ea809ab8ec6
-Solution: 0dad3ea814530043 (178,745,725 hashes)
-Hash:     000000052de3dc41750414c7feb71e604ff38a6de12b0fa1ed505bc65814c8dc
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     10836d3238fe0265629bdc49c237032a06715a29310aab5d4a3d5821a7990a7c
+Start:      5ad3f8a135ac2f9a
+Solution:   5ad3f8a1841dbcc8 (1,316,064,558 hashes)
+Hash:       000000054f0279237c0cc086e2c95afd231514925567f0d9b1df63092870defb
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 3
-Header:   7917245104373d5983221757224af22dce9cc261c53aeb1244ce4007ebe13c11
-Start:    727ec69e1e7e34f0
-Solution: 727ec69e3765652d (417,804,349 hashes)
-Hash:     00000005c40ad72e29e1150bff89a7cdcae81041a64ac4b39884999bcaf73d84
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     d6a1cd543ab6591d6a2d5d465ed979148e7c0874d3b960027da0f201df2aa114
+Start:      6cb423f27e56b7ae
+Solution:   6cb423f283995212 (88,250,980 hashes)
+Hash:       00000003c031045e1117b61c13d9689e5ba4e69d4b70cf33e6b1ced8f1ae585c
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 4
-Header:   fc585d1e0463370e07d92b462d7290104115065fc1899e52872cf00f0d935f67
-Start:    77c889dd130822eb
-Solution: 77c889dd1a07f691 (117,429,158 hashes)
-Hash:     000000058af32a68915fcb867296c496de64fa36e2f80934ab48285331a9fbba
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     aac179487e94790e9ee5c20bd81c7005d7a29267feebb0507b14fc5e3a42ca09
+Start:      70a4431238d81bd2
+Solution:   70a44312bf88d8c6 (2,259,729,652 hashes)
+Hash:       000000068019e27f3aecb15ab5ba7b8d44c5ba8ab913a21502c647358703fb68
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 5
-Header:   7fa16a4326e506361ba88b573b38a859e00bea10d9b079741362f65466302e38
-Start:    65aa53b862a3a0bb
-Solution: 65aa53b8a62fc92d (1,133,258,866 hashes)
-Hash:     000000007727fdc2b3bebf4d860afa37dccc7fb243a05b8ab5f7ddbb516d6104
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     dc43925723c611230a1adb1d3fdf6e21e5fd144d108b354770e9197f303b6d6e
+Start:      434024b759ede211
+Solution:   434024b76391f6cc (161,748,155 hashes)
+Hash:       00000000ea972c480a4386347bdb9765f847c7d3fe0434d875737b4ce616da1f
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 6
-Header:   2cbfd941316bce36bfd7e03bafe1f01853b5c0648d74a31d741cdc2b9783016c
-Start:    2ee056781e5ae312
-Solution: 2ee0567859eec762 (999,547,984 hashes)
-Hash:     00000001ee82b20f4206c0ea62938cefaf12662727b74f1a276a2d1a474ac9bf
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     ca6a19248dc60d184b9847773498766aec9f872cd914506b0752d76c69407a2e
+Start:      7ff13fb9598b75fa
+Solution:   7ff13fb95f36fb91 (95,126,935 hashes)
+Hash:       00000002e97e6b6c814c85a4bf38dcac30a07c69893ab7e88cada26fc774f853
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 7
-Header:   88b87f0a74af3d4d1646922c8f91ab50a121ce5d575b980b501b4a23284ebe6d
-Start:    72f7ee651b12a52e
-Solution: 72f7ee651d3fc965 (36,512,823 hashes)
-Hash:     0000000349ad9e74a6eb2acc312bd8f0a9c647091df29c4e75f8617545881699
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     17f8d02c63016b48780a0568b5dd93383c1edb4d4fad974fb3c94409b732d72c
+Start:      5961ef8979e90cc6
+Solution:   5961ef898edca07b (351,507,381 hashes)
+Hash:       00000006acce4539f97d0610957b7e93d3b8aecbe9d4933a034f89e4b8815926
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 8
-Header:   1471c600e48f6236548a19512f1952581fc80a103596036208cacb4c322a0165
-Start:    1a31c69b32761dc0
-Solution: 1a31c69b593c2294 (650,511,572 hashes)
-Hash:     000000055387e93086f9c441218b9d0d96f5b7aa62665f7bb5c34b2ab8ad9090
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     894eaf656633f430e9d2fa1c93688a03a5126352ced00f6aa4f3bf4a15fc7c51
+Start:      587d0bfe0e00185b
+Solution:   587d0bfe1c25ecc0 (237,360,229 hashes)
+Hash:       000000016283025bc9db671f42549f1ce8d9468a147567446d8634af91a07e73
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 9
-Header:   edcaa447c7850b5cf1884469aca285037767fc74443e054e39172921eb83d820
-Start:    3a06c1dc50096db1
-Solution: 3a06c1dc66066510 (368,899,935 hashes)
-Hash:     00000006c1f1c7f9860e99eea77103c500038613d56aad22143f0945a66585a7
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     26de6a2bc876967ce9de0d267176b222fc0e0d67d57e95524a8b020e0461e453
+Start:      010fbf3e0df3cb03
+Solution:   010fbf3e28c7f27a (450,111,351 hashes)
+Hash:       00000007c8f5966cf709f935618e5ee7f1530d721cb287e5bd2233db03306549
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
 Search 10
-Header:   fe66333f647a8644251d471d14adc56bf30b3215c73e157b6c085e7744277c38
-Start:    68d38cef6a55f6d1
-Solution: 68d38cefd6601ae6 (1,812,603,925 hashes)
-Hash:     000000013216e14ac8783c13a12d2ffc6efa60c3c9cd98a35066607f6dff8aef
-Diff:     00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+Header:     fed66f2d55b7e02d67cc5e5676e174150a957466a3ea3924c68e0c65bd5eb96f
+Start:      51111d5a3e6e7e4f
+Solution:   51111d5a7ec004d0 (1,079,084,673 hashes)
+Hash:       000000007d6548b93febbe7811c7b454e9db4a8ab995e3b76a20a133f202e502
+Difficulty: 00000007ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 PASS
 
+root@de10nano:~/linux-socfpga-sha3-miner/tools/testing/miner# 
 ```
 
 ## Disclaimer

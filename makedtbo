@@ -1,0 +1,2 @@
+#!/bin/bash
+dtc -I dts -q -o overlay.dtbo overlay.dtso

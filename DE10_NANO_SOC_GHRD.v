@@ -174,7 +174,7 @@ soc_system u0(
 	.hps_0_f2h_warm_reset_req_reset_n(~hps_warm_reset)
 );
 
-altera_edge_detector #(
+edge_detector #(
 	.PULSE_EXT(6)
 ) pulse_cold_reset(
 	.clk(FPGA_CLK1_50),
@@ -183,7 +183,7 @@ altera_edge_detector #(
 	.pulse_out(hps_cold_reset)
 );
 
-altera_edge_detector #(
+edge_detector #(
 	.PULSE_EXT(2)
 ) pulse_warm_reset(
 	.clk(FPGA_CLK1_50),
@@ -192,7 +192,7 @@ altera_edge_detector #(
 	.pulse_out(hps_warm_reset)
 );
 
-altera_edge_detector #(
+edge_detector #(
 	.PULSE_EXT(31)
 ) pulse_debug_reset(
 	.clk(FPGA_CLK1_50),

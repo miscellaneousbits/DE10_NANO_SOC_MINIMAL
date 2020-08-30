@@ -79,7 +79,6 @@ module DE10_NANO_SOC_GHRD(
 //  REG/WIRE declarations
 //=======================================================
 wire        hps_fpga_reset_n;
-wire [1: 0] fpga_debounced_buttons;
 wire [2: 0] hps_reset_req;
 wire        hps_cold_reset;
 wire        hps_warm_reset;

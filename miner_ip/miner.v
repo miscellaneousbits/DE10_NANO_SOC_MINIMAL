@@ -28,8 +28,7 @@ module miner (
    input             write,
    input      [31:0] writedata,
    output reg [31:0] readdata,
-   output reg        irq,
-   output            bsy
+   output reg        irq
 );
 
 parameter MINER_CLK_MHZ = "60 MHz";
@@ -85,6 +84,7 @@ localparam START_REG = 20; // RW
 localparam CTL_REG   = 22; // RW
 
 // Read/write register file
+
 reg [31:0] data_r [4:22];
 
 // Read only registersminer_clk
@@ -191,9 +191,7 @@ sha3_256_miner (
    .control(control_w),
    .solution(solution_w),
    .status(status_w),
-   .irq(irq_w),
-   .bsy(bsy)
+   .irq(irq_w)
 );
 
 endmodule
-

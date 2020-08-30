@@ -50,8 +50,7 @@ module sha3_256_miner (
    input       [18:0]   control,
    output reg  [63:0]   solution,
    output      [6:0]    status,
-   output reg           irq,
-	output               bsy
+   output reg           irq
 );
 
 parameter [3:0] STAGES = 8; // Stages (2, 4, or 8)
